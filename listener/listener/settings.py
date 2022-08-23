@@ -47,8 +47,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.gis",
     "authuser",
+    "recordings",
 ]
+
 
 AUTH_USER_MODEL = "authuser.User"
 
@@ -90,8 +93,11 @@ WSGI_APPLICATION = "listener.wsgi.application"
 import dj_database_url
 
 DATABASES = {
-    "default": dj_database_url.config(default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+    "default": dj_database_url.config(
+        default=f'spatialite:///{BASE_DIR / "db.sqlite3"}'
+    )
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
