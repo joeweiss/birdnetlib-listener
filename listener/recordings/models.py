@@ -7,6 +7,13 @@ from model_utils import Choices
 RECORDING_ANALYZED_STATUS_CHOICES = Choices(
     ("analyzed", "Analyzed"), ("pending", "Pending"), ("ignored", "Ignored")
 )
+ACQUISITION_TYPE = Choices(
+    ("manual", "Manual recording"),
+    ("automated", "Automated recording"),
+    ("third_party", "Third-party recording"),
+    ("unknown", "Unknown"),
+    ("other", "Other"),
+)
 
 
 class Recording(models.Model):
@@ -17,11 +24,21 @@ class Recording(models.Model):
     )
     duration = models.DurationField(null=True, blank=True)
     location = PointField(geography=True, default=Point(0.0, 0.0))
+    has_accurate_location = models.BooleanField(
+        default=False, help_text="User confirmed that location data is accurate."
+    )
+
     file = models.FileField(upload_to="uploads/%Y/%m/%d/")
+
     analyze_status = models.CharField(
         max_length=30,
         choices=RECORDING_ANALYZED_STATUS_CHOICES,
         default=RECORDING_ANALYZED_STATUS_CHOICES.pending,
+    )
+    acquistion_type = models.CharField(
+        max_length=30,
+        choices=ACQUISITION_TYPE,
+        default=ACQUISITION_TYPE.unknown,
     )
 
     @property
