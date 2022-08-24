@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
 from model_utils.models import TimeStampedModel
@@ -27,9 +28,7 @@ class Recording(models.Model):
     has_accurate_location = models.BooleanField(
         default=False, help_text="User confirmed that location data is accurate."
     )
-
-    file = models.FileField(upload_to="uploads/%Y/%m/%d/")
-
+    filepath = models.FilePathField(path=settings.FILE_PATH_FIELD_DIRECTORY)
     analyze_status = models.CharField(
         max_length=30,
         choices=RECORDING_ANALYZED_STATUS_CHOICES,
@@ -40,6 +39,8 @@ class Recording(models.Model):
         choices=ACQUISITION_TYPE,
         default=ACQUISITION_TYPE.unknown,
     )
+    is_compressed = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
 
     @property
     def longitude(self):
@@ -49,10 +50,16 @@ class Recording(models.Model):
     def latitude(self):
         return self.location.y
 
+    def __str__(self):
+        return self.filepath or f"{self.recording_started}"
+
 
 class Species(models.Model):
     common_name = models.CharField(max_length=200)
     scientific_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.common_name
 
     class Meta:
         verbose_name_plural = "species"
@@ -60,8 +67,16 @@ class Species(models.Model):
 
 class Analyzer(TimeStampedModel):
     name = models.CharField(max_length=100)
-    version = models.CharField(max_length=20)
-    release_date = models.DateTimeField()
+    version = models.CharField(max_length=20, blank=True, null=True)
+    release_date = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Analysis(TimeStampedModel):
+    recording = models.ForeignKey(to=Recording, on_delete=models.CASCADE)
+    analyzer = models.ForeignKey(to=Analyzer, on_delete=models.CASCADE)
 
 
 DETECTION_STATUS = Choices(
@@ -75,7 +90,9 @@ class Detection(models.Model):
     recording = models.ForeignKey(to=Recording, on_delete=models.CASCADE)
     species = models.ForeignKey(to=Species, on_delete=models.CASCADE)
     analyzer = models.ForeignKey(to=Analyzer, on_delete=models.CASCADE)
+    analysis = models.ForeignKey(to=Analysis, on_delete=models.CASCADE)
     confidence = models.FloatField(default=0.0)
+    detected_at = models.DateTimeField(blank=True, null=True)
     start_time = models.FloatField(blank=True, null=True, help_text="Time in seconds")
     end_time = models.FloatField(blank=True, null=True, help_text="Time in seconds")
     status = models.CharField(
