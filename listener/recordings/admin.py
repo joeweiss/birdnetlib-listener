@@ -30,6 +30,7 @@ class DetectionAdmin(admin.ModelAdmin):
         "detected_at",
         "analyzer",
     ]
+    list_filter = ["species", "detected_at"]
 
 
 admin.site.register(app_models.Detection, DetectionAdmin)
