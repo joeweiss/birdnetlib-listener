@@ -1,9 +1,6 @@
 # This example requires arecord, which is available on most Linux systems.
 # Record to 15 second files with arecord, then analyze with two analyzers.
 
-from subprocess import Popen
-import sys
-import signal
 from datetime import datetime
 from pprint import pprint
 import os
@@ -17,6 +14,7 @@ from recordings.utils import import_from_recording
 
 RECORDING_DIR = settings.INGEST_WAV_FILE_DIRECTORY
 DELETE_IF_NO_DETECTIONS = True
+PROCESS_EXISTING_BEFORE_WATCHING = True
 
 
 def on_analyze_complete(recording):
@@ -59,47 +57,37 @@ def preanalyze(recording):
 
 
 def main():
-    print("linux_arecord_and_watch")
 
     recording_dir = RECORDING_DIR
-    duration_secs = 15
-
-    RECORD_PROCESS = None
-
-    def signal_handler(sig, frame):
-        RECORD_PROCESS.terminate()
-        RECORD_PROCESS.wait()
-        print("Gracefully exitting process ...")
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, signal_handler)
-
-    arecord_command_list = [
-        "arecord",
-        "-f",
-        "S16_LE",
-        "-c2",
-        "-r48000",
-        "-t",
-        "wav",
-        "--max-file-time",
-        f"{duration_secs}",
-        "--use-strftime",
-        f"{recording_dir}/%F-%H:%M:%S.wav",
-    ]
-
-    # Start arecord in a separate process ...
-    RECORD_PROCESS = Popen(arecord_command_list)
 
     print("Starting Analyzers")
+
+    directory = recording_dir
 
     analyzer_lite = LiteAnalyzer()
     analyzer = Analyzer()
     analyzers = [analyzer, analyzer_lite]
 
+    lon = -77.3664
+    lat = 35.6127
+    min_conf = 0.70
+
+    if PROCESS_EXISTING_BEFORE_WATCHING:
+        directory_analyzer = DirectoryAnalyzer(
+            directory,
+            analyzers=analyzers,
+            lon=-77.3664,
+            lat=35.6127,
+            min_conf=0.70,
+        )
+        directory_analyzer.recording_preanalyze = preanalyze
+        directory_analyzer.on_analyze_complete = on_analyze_complete
+        directory_analyzer.on_analyze_file_complete = on_analyze_file_complete
+        directory_analyzer.on_error = on_error
+        directory_analyzer.run()
+
     print("Starting Watcher")
 
-    directory = recording_dir
     watcher = DirectoryWatcher(
         directory,
         analyzers=analyzers,
@@ -115,7 +103,7 @@ def main():
 
 
 def run():
-    print("record!")
+    print("watch_and_analyze")
     try:
         main()
     except KeyboardInterrupt:
