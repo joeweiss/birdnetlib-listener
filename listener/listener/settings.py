@@ -143,7 +143,7 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-FILE_PATH_FIELD_DIRECTORY = os.environ.get(
-    "FILE_PATH_FIELD_DIRECTORY",
+INGEST_WAV_FILE_DIRECTORY = os.environ.get(
+    "INGEST_WAV_FILE_DIRECTORY",
     "/home/pi/birdnetlib-listener/recordings",
 )

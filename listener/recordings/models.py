@@ -28,7 +28,7 @@ class Recording(models.Model):
     has_accurate_location = models.BooleanField(
         default=False, help_text="User confirmed that location data is accurate."
     )
-    filepath = models.FilePathField(path=settings.FILE_PATH_FIELD_DIRECTORY)
+    filepath = models.FilePathField(path=settings.INGEST_WAV_FILE_DIRECTORY)
     analyze_status = models.CharField(
         max_length=30,
         choices=RECORDING_ANALYZED_STATUS_CHOICES,

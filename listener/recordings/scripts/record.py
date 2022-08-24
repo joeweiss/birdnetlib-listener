@@ -6,13 +6,17 @@ import sys
 import signal
 from datetime import datetime
 from pprint import pprint
+import os
+
+from django.conf import settings
 
 from birdnetlib.watcher import DirectoryWatcher
 from birdnetlib.analyzer_lite import LiteAnalyzer
 from birdnetlib.analyzer import Analyzer
 from recordings.utils import import_from_recording
 
-RECORDING_DIR = "/home/pi/birdnetlib-listener/recordings"
+RECORDING_DIR = settings.INGEST_WAV_FILE_DIRECTORY
+DELETE_IF_NO_DETECTIONS = True
 
 
 def on_analyze_complete(recording):
@@ -27,11 +31,16 @@ def on_analyze_all_complete(recording_list):
     print("on_analyze_all_complete")
     print("---------------------------")
     # All analyzations are completed. Results passed as a list of Recording objects.
+    num_detections = 0
     for recording in recording_list:
         rec_obj = import_from_recording(recording)
         print(rec_obj, recording.filename, recording.date, recording.analyzer.name)
         pprint(recording.detections)
+        num_detections = num_detections + len(recording.detections)
         print("---------------------------")
+    if num_detections == 0 and DELETE_IF_NO_DETECTIONS:
+        print("Deleting", recording.path)
+        os.remove(recording.path)
 
 
 def on_error(recording, error):
