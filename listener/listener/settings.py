@@ -147,3 +147,7 @@ INGEST_WAV_FILE_DIRECTORY = os.environ.get(
     "INGEST_WAV_FILE_DIRECTORY",
     "/home/pi/birdnetlib-listener/recordings",
 )
+OUTPUT_WAV_FILE_DIRECTORY = os.environ.get(
+    "OUTPUT_WAV_FILE_DIRECTORY",
+    "/home/pi/birdnetlib-listener/recordings_analyzed",
+)

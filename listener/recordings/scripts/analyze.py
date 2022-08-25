@@ -8,11 +8,13 @@ import os
 from django.conf import settings
 
 from birdnetlib.watcher import DirectoryWatcher
+from birdnetlib.batch import DirectoryAnalyzer
 from birdnetlib.analyzer_lite import LiteAnalyzer
 from birdnetlib.analyzer import Analyzer
 from recordings.utils import import_from_recording
 
 RECORDING_DIR = settings.INGEST_WAV_FILE_DIRECTORY
+OUTPUT_DIR = settings.OUTPUT_WAV_FILE_DIRECTORY
 DELETE_IF_NO_DETECTIONS = True
 PROCESS_EXISTING_BEFORE_WATCHING = True
 
@@ -31,7 +33,15 @@ def on_analyze_file_complete(recording_list):
     # All analyzations are completed. Results passed as a list of Recording objects.
     num_detections = 0
     for recording in recording_list:
+        print("here")
         rec_obj = import_from_recording(recording)
+        print("there")
+        # print(rec_obj, recording.filename, recording.date, recording.analyzer.name)
+        print(rec_obj)
+        print(recording.filename)
+        print(recording.date)
+        print(recording.analyzer.name)
+
         print(rec_obj, recording.filename, recording.date, recording.analyzer.name)
         pprint(recording.detections)
         num_detections = num_detections + len(recording.detections)
@@ -39,6 +49,13 @@ def on_analyze_file_complete(recording_list):
     if num_detections == 0 and DELETE_IF_NO_DETECTIONS:
         print("Deleting", recording.path)
         os.remove(recording.path)
+    else:
+        new_path = os.path.join(OUTPUT_DIR, os.path.basename(recording.filename))
+        print("Moving to output dir", new_path)
+        os.rename(
+            recording.path,
+            new_path,
+        )
 
 
 def on_error(recording, error):
@@ -73,27 +90,28 @@ def main():
     min_conf = 0.70
 
     if PROCESS_EXISTING_BEFORE_WATCHING:
+        print("Processing existing")
         directory_analyzer = DirectoryAnalyzer(
             directory,
             analyzers=analyzers,
-            lon=-77.3664,
-            lat=35.6127,
-            min_conf=0.70,
+            lon=lon,
+            lat=lat,
+            min_conf=min_conf,
         )
         directory_analyzer.recording_preanalyze = preanalyze
         directory_analyzer.on_analyze_complete = on_analyze_complete
         directory_analyzer.on_analyze_file_complete = on_analyze_file_complete
         directory_analyzer.on_error = on_error
-        directory_analyzer.run()
+        directory_analyzer.process()
 
     print("Starting Watcher")
 
     watcher = DirectoryWatcher(
         directory,
         analyzers=analyzers,
-        lon=-77.3664,
-        lat=35.6127,
-        min_conf=0.70,
+        lon=lon,
+        lat=lat,
+        min_conf=min_conf,
     )
     watcher.recording_preanalyze = preanalyze
     watcher.on_analyze_complete = on_analyze_complete
@@ -104,10 +122,4 @@ def main():
 
 def run():
     print("watch_and_analyze")
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("KeyboardInterrupt")
-    except Exception as e:
-        print("Exception")
-        print(e)
+    main()

@@ -5,18 +5,18 @@ from recordings.models import (
     DETECTION_STATUS,
 )
 from django.contrib.gis.geos import Point
+
 # from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
+
 # import pytz
 
 
 def import_from_recording(rec_obj):
     # Imports from a birdnetlib.Recording object.
+    # Make date timezone aware.
     recording_started_at = timezone.make_aware(rec_obj.date)
-    # recording_started_at = timezone.localtime(
-    #     rec_obj.date, pytz.timezone(settings.TIME_ZONE)
-    # )
     recording_obj, created = Recording.objects.get_or_create(
         recording_started=recording_started_at,
         filepath=rec_obj.path,

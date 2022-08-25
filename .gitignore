@@ -130,3 +130,5 @@ dmypy.json
 
 listener/uploads
 recordings/*.wav
+recordings_analyzed/*.wav
+old_recordings/*.wav
