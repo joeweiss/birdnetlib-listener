@@ -2,8 +2,12 @@ from django.db import models
 from django.conf import settings
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point
+from django.utils import timezone
 from model_utils.models import TimeStampedModel
 from model_utils import Choices
+from django.db.models.signals import post_save
+from recordings.signals import detection_post_save
+
 
 RECORDING_ANALYZED_STATUS_CHOICES = Choices(
     ("analyzed", "Analyzed"), ("pending", "Pending"), ("ignored", "Ignored")
@@ -100,3 +104,58 @@ class Detection(models.Model):
         choices=DETECTION_STATUS,
         default=DETECTION_STATUS.automated_detection_only,
     )
+
+    @property
+    def is_unique_daily_detection(self):
+        if not self.detected_at:
+            # No date, not unique.
+            return False
+        today = timezone.now()
+        if not self.detected_at.date() == today.date():
+            # Not from today, not unique.
+            return False
+        # Query for today's detections.
+        detections_today_for_species = (
+            Detection.objects.all()
+            .filter(detected_at__date=today, species=self.species)
+            .count()
+        )
+        return detections_today_for_species == 1
+
+    @property
+    def is_unique_alltime_detection(self):
+        total_detections_of_this_species = (
+            Detection.objects.all().filter(species=self.species).count()
+        )
+        return total_detections_of_this_species == 1
+
+
+NOTIFICATION_TYPES = Choices(
+    ("apprise", "Apprise"),
+    ("other", "Other"),
+)
+
+NOTIFICATION_DETECTION_TYPES = Choices(
+    ("all", "All detections"),
+    ("new_all_time", "New species detected"),
+    ("new_daily", "New species for today"),
+)
+
+
+class NotificationConfig(models.Model):
+    name = models.CharField(max_length=50, help_text="Friendly name")
+    notification_type = models.CharField(
+        max_length=50,
+        choices=NOTIFICATION_TYPES,
+        default=NOTIFICATION_TYPES.apprise,
+    )
+    detection_type = models.CharField(
+        max_length=50,
+        choices=NOTIFICATION_DETECTION_TYPES,
+        default=NOTIFICATION_DETECTION_TYPES.new_daily,
+    )
+    apprise_string = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
+
+post_save.connect(detection_post_save, sender=Detection)

@@ -3,6 +3,9 @@ from recordings.models import (
     RECORDING_ANALYZED_STATUS_CHOICES,
     ACQUISITION_TYPE,
     DETECTION_STATUS,
+    NotificationConfig,
+    NOTIFICATION_TYPES,
+    NOTIFICATION_DETECTION_TYPES,
 )
 from django.contrib.gis.geos import Point
 
@@ -11,6 +14,8 @@ from datetime import timedelta
 from django.utils import timezone
 
 # import pytz
+
+import apprise
 
 
 def import_from_recording(rec_obj):
@@ -52,3 +57,16 @@ def import_from_recording(rec_obj):
         detection.save()
 
     return recording_obj
+
+
+def send_notification_for_detection(detection, notification_config):
+    print("Sending detection")
+    # Create an Apprise instance
+    apobj = apprise.Apprise()
+    apobj.add(notification_config.apprise_string)
+
+    title = NOTIFICATION_DETECTION_TYPES[notification_config.detection_type]
+    result = apobj.notify(
+        body=f"{detection.species.common_name} - confidence @ {detection.confidence:.1f}",
+        title=f"{title}",
+    )

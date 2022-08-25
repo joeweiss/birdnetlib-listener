@@ -1,6 +1,7 @@
 from django.test import TestCase
 from collections import namedtuple
-from django.utils import timezone
+
+from datetime import datetime
 
 from recordings.models import (
     Recording,
@@ -43,11 +44,14 @@ class BirdnetlibTestCase(TestCase):
         )
         Analyzer = namedtuple("Analyzer", ["name", "model_name"])
         analyzer = Analyzer("Analyzer", "BirdNET-Analyzer")
+
+        naive_datetime = datetime.now()
+
         recording = BirdnetlibRecording(
             "recordings/tests/files/audio.wav",
             analyzer,
             detections,
-            timezone.now(),
+            naive_datetime,
             -77.3664,
             35.6127,
             0.1,
@@ -91,11 +95,14 @@ class BirdnetlibTestCase(TestCase):
         )
         Analyzer = namedtuple("Analyzer", ["name", "model_name"])
         analyzer = Analyzer("Analyzer", "BirdNET-Analyzer")
+
+        naive_datetime = datetime.now()
+
         recording = BirdnetlibRecording(
             "recordings/tests/files/audio.wav",
             analyzer,
             detections,
-            timezone.now(),
+            naive_datetime,
             -77.3664,
             35.6127,
             0.1,

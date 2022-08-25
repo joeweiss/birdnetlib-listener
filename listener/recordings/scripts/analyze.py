@@ -33,16 +33,13 @@ def on_analyze_file_complete(recording_list):
     # All analyzations are completed. Results passed as a list of Recording objects.
     num_detections = 0
     for recording in recording_list:
-        print("here")
-        rec_obj = import_from_recording(recording)
-        print("there")
-        # print(rec_obj, recording.filename, recording.date, recording.analyzer.name)
-        print(rec_obj)
-        print(recording.filename)
-        print(recording.date)
-        print(recording.analyzer.name)
 
-        print(rec_obj, recording.filename, recording.date, recording.analyzer.name)
+        # Only import recordings with detections.
+        if len(recording.detections) == 0:
+            continue
+
+        rec_obj = import_from_recording(recording)
+
         pprint(recording.detections)
         num_detections = num_detections + len(recording.detections)
         print("---------------------------")
@@ -87,7 +84,7 @@ def main():
 
     lon = -77.3664
     lat = 35.6127
-    min_conf = 0.70
+    min_conf = 0.7
 
     if PROCESS_EXISTING_BEFORE_WATCHING:
         print("Processing existing")
