@@ -7,6 +7,7 @@ from model_utils.models import TimeStampedModel
 from model_utils import Choices
 from django.db.models.signals import post_save
 from recordings.signals import detection_post_save
+import os
 
 
 RECORDING_ANALYZED_STATUS_CHOICES = Choices(
@@ -32,7 +33,9 @@ class Recording(models.Model):
     has_accurate_location = models.BooleanField(
         default=False, help_text="User confirmed that location data is accurate."
     )
-    filepath = models.FilePathField(path=settings.INGEST_WAV_FILE_DIRECTORY)
+    filepath = models.FilePathField(
+        path=settings.OUTPUT_WAV_FILE_DIRECTORY, blank=True, null=True
+    )
     analyze_status = models.CharField(
         max_length=30,
         choices=RECORDING_ANALYZED_STATUS_CHOICES,
@@ -53,6 +56,25 @@ class Recording(models.Model):
     @property
     def latitude(self):
         return self.location.y
+
+    def archive_file(self):
+        new_path = os.path.join(
+            settings.OUTPUT_WAV_FILE_DIRECTORY, os.path.basename(self.filepath)
+        )
+        os.rename(
+            self.filepath,
+            new_path,
+        )
+        self.filepath = new_path
+        self.save()
+
+    def delete_file(self):
+        os.remove(
+            self.filepath,
+        )
+        self.filepath = None
+        self.is_deleted = True
+        self.save()
 
     def __str__(self):
         return self.filepath or f"{self.recording_started}"

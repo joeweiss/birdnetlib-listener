@@ -47,12 +47,14 @@ def on_analyze_file_complete(recording_list):
         print("Deleting", recording.path)
         os.remove(recording.path)
     else:
-        new_path = os.path.join(OUTPUT_DIR, os.path.basename(recording.filename))
-        print("Moving to output dir", new_path)
-        os.rename(
-            recording.path,
-            new_path,
-        )
+        if rec_obj:
+            rec_obj.archive_file()
+        else:
+            new_path = os.path.join(OUTPUT_DIR, os.path.basename(recording.filename))
+            os.rename(
+                recording.path,
+                new_path,
+            )
 
 
 def on_error(recording, error):

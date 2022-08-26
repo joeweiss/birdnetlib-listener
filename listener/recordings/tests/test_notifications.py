@@ -18,7 +18,7 @@ from recordings.utils import import_from_recording
 from mock import patch, Mock
 
 
-class NotifactionsTestCase(TestCase):
+class NotificationTestCase(TestCase):
     def setUp(self):
         self.analyzer = Analyzer.objects.create(name="Default Analyzer")
         self.recording = Recording.objects.create(recording_started=timezone.now())
