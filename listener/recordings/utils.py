@@ -67,6 +67,6 @@ def send_notification_for_detection(detection, notification_config):
 
     title = NOTIFICATION_DETECTION_TYPES[notification_config.detection_type]
     result = apobj.notify(
-        body=f"{detection.species.common_name} - confidence @ {detection.confidence:.1f}",
+        body=f"{detection.species.common_name} - confidence @ {detection.confidence:.2f}",
         title=f"{title}",
     )
