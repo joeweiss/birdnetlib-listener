@@ -1,6 +1,7 @@
 from django.test import TestCase
 from collections import namedtuple
 
+from django.utils import timezone
 from datetime import datetime
 
 from recordings.models import (
@@ -45,7 +46,7 @@ class BirdnetlibTestCase(TestCase):
         Analyzer = namedtuple("Analyzer", ["name", "model_name"])
         analyzer = Analyzer("Analyzer", "BirdNET-Analyzer")
 
-        naive_datetime = datetime.now()
+        naive_datetime = timezone.now()
 
         recording = BirdnetlibRecording(
             "recordings/tests/files/audio.wav",
@@ -56,7 +57,7 @@ class BirdnetlibTestCase(TestCase):
             35.6127,
             0.1,
         )
-        print(recording)
+        # print(recording)
 
         recording_obj = Recording.objects.create(
             recording_started=recording.date,
@@ -66,7 +67,7 @@ class BirdnetlibTestCase(TestCase):
             analyze_status=RECORDING_ANALYZED_STATUS_CHOICES.pending,
             acquistion_type=ACQUISITION_TYPE.automated,
         )
-        print(recording_obj)
+        # print(recording_obj)
         self.assertEqual(recording_obj.id > 0, True)
 
     def test_ingest_from_recording_object(self):
@@ -107,8 +108,8 @@ class BirdnetlibTestCase(TestCase):
             35.6127,
             0.1,
         )
-        print(recording)
+        # print(recording)
 
         rec_obj = import_from_recording(recording)
-        print("rec_obj", rec_obj)
+        # print("rec_obj", rec_obj)
         self.assertEqual(rec_obj.id > 0, True)
