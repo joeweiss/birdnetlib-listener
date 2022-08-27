@@ -7,6 +7,7 @@ from model_utils.models import TimeStampedModel
 from model_utils import Choices
 from django.db.models.signals import post_save
 from recordings.signals import detection_post_save
+
 import os
 
 
@@ -126,6 +127,10 @@ class Detection(models.Model):
         choices=DETECTION_STATUS,
         default=DETECTION_STATUS.automated_detection_only,
     )
+    extracted_path = models.FilePathField(
+        path=settings.DETECTION_EXTRACTION_DIRECTORY, blank=True, null=True
+    )
+    extracted = models.BooleanField(default=False)
 
     @property
     def is_unique_daily_detection(self):

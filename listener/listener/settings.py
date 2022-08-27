@@ -151,3 +151,17 @@ OUTPUT_WAV_FILE_DIRECTORY = os.environ.get(
     "OUTPUT_WAV_FILE_DIRECTORY",
     "/home/pi/birdnetlib-listener/recordings_analyzed",
 )
+
+DETECTION_EXTRACTION_ENABLED = os.environ.get(
+    "DETECTION_EXTRACTION_ENABLED",
+    True,
+)
+
+DETECTION_EXTRACTION_BITRATE = os.environ.get(
+    "DETECTION_EXTRACTION_BITRATE",
+    320,
+)
+DETECTION_EXTRACTION_DIRECTORY = os.environ.get(
+    "DETECTION_EXTRACTION_DIRECTORY",
+    "/home/pi/birdnetlib-listener/recordings_extracted",
+)

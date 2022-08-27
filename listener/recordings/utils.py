@@ -9,13 +9,16 @@ from recordings.models import (
 )
 from django.contrib.gis.geos import Point
 
-# from django.conf import settings
+from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
+from django.utils.text import slugify
 
 # import pytz
 
 import apprise
+from pydub import AudioSegment
+import os
 
 
 def import_from_recording(rec_obj):
@@ -55,6 +58,8 @@ def import_from_recording(rec_obj):
             )
         detection.status = DETECTION_STATUS.automated_detection_only
         detection.save()
+        if settings.DETECTION_EXTRACTION_ENABLED:
+            extract_detection_audio_file(detection)
 
     return recording_obj
 
@@ -70,3 +75,36 @@ def send_notification_for_detection(detection, notification_config):
         body=f"{detection.species.common_name} - confidence @ {detection.confidence:.2f}",
         title=f"{title}",
     )
+
+
+def extract_detection_audio_file(detection):
+
+    if not os.path.exists(detection.recording.filepath):
+        return None
+
+    if not os.path.exists(settings.DETECTION_EXTRACTION_DIRECTORY):
+        # Make DETECTION_EXTRACTION_DIRECTORY if not existing.
+        os.mkdir(settings.DETECTION_EXTRACTION_DIRECTORY)
+
+    audio = AudioSegment.from_file(detection.recording.filepath)
+    start = detection.start_time
+    end = detection.end_time
+    extract = audio[start * 1000 : end * 1000]  # In milliseconds
+    bitrate = settings.DETECTION_EXTRACTION_BITRATE
+
+    if detection.detected_at:
+        dt = detection.detected_at
+        date_str = dt.strftime("%Y%d%m-%Hh%Mm%Ss")
+        filename = f"{detection.species.common_name}-{date_str}"
+    else:
+        filename = f"{detection.species.common_name}-undated-{detection.id:07}"
+
+    filename = slugify(filename)
+    extracted_path = os.path.join(
+        settings.DETECTION_EXTRACTION_DIRECTORY, f"{filename}.mp3"
+    )
+    extract.export(extracted_path, format="mp3", bitrate=f"{bitrate}k")
+
+    detection.extracted_path = extracted_path
+    detection.extracted = True
+    detection.save()
