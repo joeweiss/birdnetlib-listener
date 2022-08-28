@@ -1,0 +1,10 @@
+[Unit]
+Description=uWSGI instance to serve myapp
+
+[Service]
+ExecStartPre=-/usr/bin/bash -c 'mkdir -p /run/uwsgi; chown pi:nginx /run/uwsgi'
+ExecStart=/usr/bin/bash -c '/home/pi/.pyenv/versions/3.7.13-listener-spatialite/bin/uwsgi --ini /home/pi/birdnetlib-listener/listener/listener/listener_uwsgi.ini'
+
+
+[Install]
+WantedBy=multi-user.target

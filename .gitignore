@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 listener/uploads
+listener/static
 recordings/*.wav
 recordings_analyzed/*.wav
 old_recordings/*.wav
