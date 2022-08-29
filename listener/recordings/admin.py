@@ -31,7 +31,12 @@ class DetectionAdmin(admin.ModelAdmin):
         "analyzer",
         "extracted_file",
     ]
-    list_filter = ["species", "detected_at"]
+    list_filter = [
+        "detected_at",
+        "analyzer",
+        "species",
+        "extracted",
+    ]
     raw_id_fields = ["recording", "analysis"]
 
 
