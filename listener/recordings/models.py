@@ -127,8 +127,8 @@ class Detection(models.Model):
         choices=DETECTION_STATUS,
         default=DETECTION_STATUS.automated_detection_only,
     )
-    extracted_path = models.FilePathField(
-        path=settings.DETECTION_EXTRACTION_DIRECTORY, blank=True, null=True
+    extracted_file = models.FileField(
+        upload_to="extracted/%Y/%m/%d/", blank=True, null=True
     )
     extracted = models.BooleanField(default=False)
 

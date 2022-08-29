@@ -1,20 +1,12 @@
-import tempfile
 from django.test import TestCase
-from django.conf import settings
 from django.utils import timezone
 from recordings.models import (
     Analysis,
     Analyzer,
     Recording,
-    RECORDING_ANALYZED_STATUS_CHOICES,
-    ACQUISITION_TYPE,
-    NotificationConfig,
-    NOTIFICATION_DETECTION_TYPES,
-    NOTIFICATION_TYPES,
     Species,
     Detection,
 )
-import tempfile
 import shutil
 import os
 from recordings.utils import extract_detection_audio_file
@@ -42,17 +34,19 @@ class ExtractionTestCase(TestCase):
         )
         self.archive_dir = "recordings/tests/files/archives"
         try:
-            os.rmdir(self.archive_dir)
+            shutil.rmtree(self.archive_dir)
         except:
             pass
         os.mkdir(self.archive_dir)
 
     def tearDown(self):
-        os.rmdir(self.archive_dir)
+        shutil.rmtree(self.archive_dir)
 
     def test_extraction(self):
 
-        with self.settings(DETECTION_EXTRACTION_DIRECTORY=self.archive_dir):
+        with self.settings(
+            DETECTION_EXTRACTION_DIRECTORY=self.archive_dir, MEDIA_ROOT=self.archive_dir
+        ):
             path = "recordings/tests/files/audio.wav"
             self.recording.filepath = path
             self.recording.save()
@@ -62,12 +56,17 @@ class ExtractionTestCase(TestCase):
 
             self.assertTrue(self.detection.extracted)
 
-            self.assertTrue(os.path.exists(self.detection.extracted_path))
-            os.remove(self.detection.extracted_path)
+            self.assertIsNotNone(self.detection.extracted_file)
+            self.assertTrue(os.path.exists(self.detection.extracted_file.path))
+
+            # Clean up files
+            self.detection.extracted_file.delete()
 
     def test_extraction_no_date(self):
 
-        with self.settings(DETECTION_EXTRACTION_DIRECTORY=self.archive_dir):
+        with self.settings(
+            DETECTION_EXTRACTION_DIRECTORY=self.archive_dir, MEDIA_ROOT=self.archive_dir
+        ):
             path = "recordings/tests/files/audio.wav"
             self.recording.filepath = path
             self.recording.save()
@@ -81,5 +80,8 @@ class ExtractionTestCase(TestCase):
 
             self.assertTrue(self.detection.extracted)
 
-            self.assertTrue(os.path.exists(self.detection.extracted_path))
-            os.remove(self.detection.extracted_path)
+            self.assertIsNotNone(self.detection.extracted_file)
+            self.assertTrue(os.path.exists(self.detection.extracted_file.path))
+
+            # Clean up files
+            self.detection.extracted_file.delete()

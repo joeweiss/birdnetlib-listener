@@ -13,6 +13,8 @@ from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
 from django.utils.text import slugify
+from django.core.files import File
+
 
 # import pytz
 
@@ -105,6 +107,9 @@ def extract_detection_audio_file(detection):
     )
     extract.export(extracted_path, format="mp3", bitrate=f"{bitrate}k")
 
-    detection.extracted_path = extracted_path
+    # Save extracted file to Django.
+    with open(extracted_path, mode="rb") as file:
+        detection.extracted_file.save(f"{filename}.mp3", file)
+
     detection.extracted = True
     detection.save()

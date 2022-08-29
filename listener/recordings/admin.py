@@ -29,8 +29,10 @@ class DetectionAdmin(admin.ModelAdmin):
         "confidence",
         "detected_at",
         "analyzer",
+        "extracted_file",
     ]
     list_filter = ["species", "detected_at"]
+    raw_id_fields = ["recording", "analysis"]
 
 
 admin.site.register(app_models.Detection, DetectionAdmin)
