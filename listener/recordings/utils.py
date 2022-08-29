@@ -3,8 +3,6 @@ from recordings.models import (
     RECORDING_ANALYZED_STATUS_CHOICES,
     ACQUISITION_TYPE,
     DETECTION_STATUS,
-    NotificationConfig,
-    NOTIFICATION_TYPES,
     NOTIFICATION_DETECTION_TYPES,
 )
 from django.contrib.gis.geos import Point
@@ -13,8 +11,7 @@ from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
 from django.utils.text import slugify
-from django.core.files import File
-
+import tempfile
 
 # import pytz
 
@@ -102,14 +99,15 @@ def extract_detection_audio_file(detection):
         filename = f"{detection.species.common_name}-undated-{detection.id:07}"
 
     filename = slugify(filename)
-    extracted_path = os.path.join(
-        settings.DETECTION_EXTRACTION_DIRECTORY, f"{filename}.mp3"
-    )
-    extract.export(extracted_path, format="mp3", bitrate=f"{bitrate}k")
 
-    # Save extracted file to Django.
-    with open(extracted_path, mode="rb") as file:
-        detection.extracted_file.save(f"{filename}.mp3", file)
+    # Make tempfile for pydub and export extraction.
+    with tempfile.NamedTemporaryFile(suffix=".mp3") as tmp:
+        extracted_path = tmp.name
+        extract.export(extracted_path, format="mp3", bitrate=f"{bitrate}k")
+
+        # Save extracted file to Django.
+        with open(extracted_path, mode="rb") as file:
+            detection.extracted_file.save(f"{filename}.mp3", file)
 
     detection.extracted = True
     detection.save()
