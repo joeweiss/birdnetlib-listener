@@ -81,10 +81,6 @@ def extract_detection_audio_file(detection):
     if not os.path.exists(detection.recording.filepath):
         return None
 
-    if not os.path.exists(settings.DETECTION_EXTRACTION_DIRECTORY):
-        # Make DETECTION_EXTRACTION_DIRECTORY if not existing.
-        os.mkdir(settings.DETECTION_EXTRACTION_DIRECTORY)
-
     audio = AudioSegment.from_file(detection.recording.filepath)
     start = detection.start_time
     end = detection.end_time

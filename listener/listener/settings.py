@@ -148,25 +148,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+# Where the system looks for new WAV files.
+# NOTE: WAV files that not return detections are permanently deleted!
 INGEST_WAV_FILE_DIRECTORY = os.environ.get(
     "INGEST_WAV_FILE_DIRECTORY",
     "/home/pi/birdnetlib-listener/recordings",
 )
+
+# Where the system copies the WAV files IF AND ONLY IF detections are returned for the recording.
+# NOTE: WAV files that not return detections are permanently deleted!
 OUTPUT_WAV_FILE_DIRECTORY = os.environ.get(
     "OUTPUT_WAV_FILE_DIRECTORY",
     "/home/pi/birdnetlib-listener/recordings_analyzed",
 )
 
+# If True, system will extract the detection and add it to the detection obj as an MP3 file.
 DETECTION_EXTRACTION_ENABLED = os.environ.get(
     "DETECTION_EXTRACTION_ENABLED",
     True,
 )
-
 DETECTION_EXTRACTION_BITRATE = os.environ.get(
     "DETECTION_EXTRACTION_BITRATE",
     320,
-)
-DETECTION_EXTRACTION_DIRECTORY = os.environ.get(
-    "DETECTION_EXTRACTION_DIRECTORY",
-    "/home/pi/birdnetlib-listener/recordings_extracted",
 )

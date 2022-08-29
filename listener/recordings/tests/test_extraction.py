@@ -44,9 +44,7 @@ class ExtractionTestCase(TestCase):
 
     def test_extraction(self):
 
-        with self.settings(
-            DETECTION_EXTRACTION_DIRECTORY=self.archive_dir, MEDIA_ROOT=self.archive_dir
-        ):
+        with self.settings(MEDIA_ROOT=self.archive_dir):
             path = "recordings/tests/files/audio.wav"
             self.recording.filepath = path
             self.recording.save()
@@ -64,9 +62,7 @@ class ExtractionTestCase(TestCase):
 
     def test_extraction_no_date(self):
 
-        with self.settings(
-            DETECTION_EXTRACTION_DIRECTORY=self.archive_dir, MEDIA_ROOT=self.archive_dir
-        ):
+        with self.settings(MEDIA_ROOT=self.archive_dir):
             path = "recordings/tests/files/audio.wav"
             self.recording.filepath = path
             self.recording.save()
