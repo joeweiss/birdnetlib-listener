@@ -22,6 +22,8 @@ jobs:
           submodules: "true"
       - name: Setup FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v1.1.0
+      - name: Install GDAL library
+        run: sudo apt-get install gdal-bin
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
