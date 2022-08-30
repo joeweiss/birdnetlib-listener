@@ -2,7 +2,7 @@ name: Test
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "docker-m1"]
   pull_request:
     branches: ["main"]
 
@@ -34,8 +34,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements_test.txt
       - name: Migrate
-        working-directory: ./listener
+        working-directory: ./server
         run: python manage.py migrate
       - name: Test
-        working-directory: ./listener
+        working-directory: ./server
         run: python manage.py test

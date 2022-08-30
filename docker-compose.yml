@@ -3,11 +3,11 @@ version: '3.8'
 services:
   web:
     build: 
-      context: ./listener
+      context: ./server
       dockerfile: Dockerfile.macos.m1
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./listener/:/usr/src/app/
+      - ./server/:/usr/src/app/
       - ./audio_inbox/:/usr/audio/incoming/
       - ./audio_post_analyze/:/usr/audio/analyzed/
     ports:
