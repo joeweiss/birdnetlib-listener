@@ -1,0 +1,11 @@
+FROM python:3.9
+WORKDIR /usr/src/app
+
+RUN python -m pip install --upgrade pip
+
+COPY ./requirements.macos.m1.txt .
+RUN pip install -r requirements.macos.m1.txt
+
+RUN apt-get update; apt-get install -y inotify-tools ffmpeg libsqlite3-mod-spatialite gdal-bin
+
+ADD . .

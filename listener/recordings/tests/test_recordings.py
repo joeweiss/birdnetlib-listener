@@ -60,7 +60,7 @@ class RecordingsTestCase(TestCase):
             self.assertTrue(os.path.exists(self.recording.filepath))
 
             # Copy back to prevent exception.
-            os.rename(self.recording.filepath, tmp.name)
+            shutil.move(self.recording.filepath, tmp.name)
 
     def test_recording_delete_file(self):
 

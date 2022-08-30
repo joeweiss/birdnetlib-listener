@@ -12,12 +12,15 @@ from birdnetlib.batch import DirectoryAnalyzer
 from birdnetlib.analyzer_lite import LiteAnalyzer
 from birdnetlib.analyzer import Analyzer
 from recordings.utils import import_from_recording
+import shutil
 
 RECORDING_DIR = settings.INGEST_WAV_FILE_DIRECTORY
 OUTPUT_DIR = settings.OUTPUT_WAV_FILE_DIRECTORY
 DELETE_IF_NO_DETECTIONS = True
 PROCESS_EXISTING_BEFORE_WATCHING = True
 
+print("RECORDING_DIR", RECORDING_DIR)
+print("OUTPUT_DIR", OUTPUT_DIR)
 
 def on_analyze_complete(recording):
     print("on_analyze_complete")
@@ -31,6 +34,10 @@ def on_analyze_file_complete(recording_list):
     print("on_analyze_file_complete")
     print("---------------------------")
     # All analyzations are completed. Results passed as a list of Recording objects.
+
+    if len(recording_list) == 0:
+        return
+
     num_detections = 0
     for recording in recording_list:
 
@@ -51,7 +58,7 @@ def on_analyze_file_complete(recording_list):
             rec_obj.archive_file()
         else:
             new_path = os.path.join(OUTPUT_DIR, os.path.basename(recording.filename))
-            os.rename(
+            shutil.move(
                 recording.path,
                 new_path,
             )
@@ -111,6 +118,7 @@ def main():
         lon=lon,
         lat=lat,
         min_conf=min_conf,
+        use_polling=True,
     )
     watcher.recording_preanalyze = preanalyze
     watcher.on_analyze_complete = on_analyze_complete

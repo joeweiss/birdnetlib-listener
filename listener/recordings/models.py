@@ -7,7 +7,7 @@ from model_utils.models import TimeStampedModel
 from model_utils import Choices
 from django.db.models.signals import post_save
 from recordings.signals import detection_post_save
-
+import shutil
 import os
 
 
@@ -62,7 +62,7 @@ class Recording(models.Model):
         new_path = os.path.join(
             settings.OUTPUT_WAV_FILE_DIRECTORY, os.path.basename(self.filepath)
         )
-        os.rename(
+        shutil.move(
             self.filepath,
             new_path,
         )
