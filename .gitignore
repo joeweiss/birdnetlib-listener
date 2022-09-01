@@ -128,10 +128,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-listener/uploads
-listener/static
-listener/media
+server/uploads
+server/static
+server/media
 recordings/*.wav
 recordings_analyzed/*.wav
 old_recordings/*.wav
 recordings_extracted/*.mp3
+.DS_Store
+.env.dev
+audio_inbox
+audio_post_analyze
