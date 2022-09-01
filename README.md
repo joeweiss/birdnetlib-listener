@@ -20,7 +20,7 @@ To run bash within the docker instance:
 `docker compose -f docker-compose.rpi4.yml exec web bash`
 
 To rebuild the image for a reason (e.g. after pip change)
-`docker compose -f docker-compose.rpi4.yml down; docker compose build --no-cache`
+`docker compose -f docker-compose.rpi4.yml down; docker compose -f docker-compose.rpi4.yml build --no-cache`
 
 ### MacOS M1
 
@@ -40,7 +40,7 @@ To run bash within the docker instance:
 `docker compose -f docker-compose.macm1.yml exec web bash`
 
 To rebuild the image for a reason (e.g. after pip change)
-`docker compose -f docker-compose.macm1.yml down; docker compose build --no-cache`
+`docker compose -f docker-compose.macm1.yml down; docker compose -f docker-compose.macm1.yml build --no-cache`
 
 ## Recording audio
 
