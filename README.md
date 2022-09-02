@@ -64,20 +64,20 @@ To rebuild the image for a reason (e.g. after pip change)
 
 ## Recording audio
 
-The docker container itself does not record audio to the `audio_inbox` directory. See below for basic examples for recording 30-second properly-dated WAV files to audio_inbox.
+The docker container itself does not record audio to the `audio/inbox` directory. See below for basic examples for recording 30-second properly-dated WAV files to audio/inbox.
 
 ### Raspberry Pi 4
 
 Prerequisites: arecord
 
-To record an audio stream to "audio_inbox", run the following.
+To record an audio stream to "audio/inbox", run the following.
 `python script_examples/audio_recording_rpi.py`
 
 ### MacOS (M1 or Intel)
 
 Prerequisites: sox, pysox
 
-To record an audio stream to "audio_inbox", run the following.
+To record an audio stream to "audio/inbox", run the following.
 `python script_examples/audio_recording_macos.py`
 
 ## Putting it all together
@@ -91,8 +91,8 @@ Prerequisites: Raspberry Pi 4 with clean 64-bit system, `docker`, `docker-compos
 In one terminal, run:
 
 ```
-mkdir audio_inbox
-mkdir audio_post_analyze
+mkdir audio/inbox
+mkdir audio/post_analyze
 docker compose -f docker-compose.rpi4.yml up -d --build
 docker compose -f docker-compose.rpi4.yml exec web python manage.py runscript analyze
 ```

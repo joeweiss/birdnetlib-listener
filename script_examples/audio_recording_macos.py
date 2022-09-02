@@ -9,7 +9,7 @@ from datetime import datetime
 def main():
 
     duration_secs = 15
-    output_directory = "audio_inbox"
+    output_directory = "audio/inbox"
 
     while True:
         filename = datetime.now().strftime("%Y-%m-%d-%H:%M:%S.wav")

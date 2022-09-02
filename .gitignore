@@ -137,5 +137,9 @@ old_recordings/*.wav
 recordings_extracted/*.mp3
 .DS_Store
 .env.dev
-audio_inbox
-audio_post_analyze
+
+audio/inbox/*
+audio/post_analyze/*
+
+!audio/inbox/README.md
+!audio/post_analyze/README.md

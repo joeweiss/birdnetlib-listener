@@ -7,7 +7,7 @@ import signal
 
 
 def main():
-    recording_dir = "audio_inbox"
+    recording_dir = "audio/inbox"
     duration_secs = 15
 
     arecord_command_list = [
