@@ -35,8 +35,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "pi400-64bit.local"]
-
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1 localhost").split(' ') 
 
 # Application definition
 
@@ -153,14 +152,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # NOTE: WAV files that not return detections are permanently deleted!
 INGEST_WAV_FILE_DIRECTORY = os.environ.get(
     "INGEST_WAV_FILE_DIRECTORY",
-    "/home/pi/birdnetlib-listener/recordings",
+    "/usr/audio/incoming",
 )
 
 # Where the system copies the WAV files IF AND ONLY IF detections are returned for the recording.
 # NOTE: WAV files that not return detections are permanently deleted!
 OUTPUT_WAV_FILE_DIRECTORY = os.environ.get(
     "OUTPUT_WAV_FILE_DIRECTORY",
-    "/home/pi/birdnetlib-listener/recordings_analyzed",
+    "/usr/audio/analyzed",
 )
 
 # If True, system will extract the detection and add it to the detection obj as an MP3 file.
