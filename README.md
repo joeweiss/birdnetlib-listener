@@ -20,7 +20,7 @@ To run bash within the docker instance:
 `docker compose -f docker-compose.rpi4.yml exec web bash`
 
 To rebuild the image for a reason (e.g. after pip change)
-`docker compose -f docker-compose.rpi4.yml down; docker compose build --no-cache`
+`docker compose -f docker-compose.rpi4.yml down; docker compose -f docker-compose.rpi4.yml build --no-cache`
 
 ### MacOS M1
 
@@ -40,7 +40,27 @@ To run bash within the docker instance:
 `docker compose -f docker-compose.macm1.yml exec web bash`
 
 To rebuild the image for a reason (e.g. after pip change)
-`docker compose -f docker-compose.macm1.yml down; docker compose build --no-cache`
+`docker compose -f docker-compose.macm1.yml down; docker compose -f docker-compose.macm1.yml build --no-cache`
+
+### MacOS Intel
+
+Bring it up and run:
+`docker compose -f docker-compose.macintel.yml up -d --build`
+
+To run the watcher/analyzer:
+`docker compose -f docker-compose.macintel.yml exec web python manage.py runscript analyze`
+
+To run the Django test cases:
+`docker compose -f docker-compose.macintel.yml exec web python manage.py test`
+
+To take it down:
+`docker compose -f docker-compose.macintel.yml down`
+
+To run bash within the docker instance:
+`docker compose -f docker-compose.macintel.yml exec web bash`
+
+To rebuild the image for a reason (e.g. after pip change)
+`docker compose -f docker-compose.macintel.yml down; docker compose -f docker-compose.macintel.yml build --no-cache`
 
 ## Recording audio
 
@@ -53,7 +73,7 @@ Prerequisites: arecord
 To record an audio stream to "audio_inbox", run the following.
 `python script_examples/audio_recording_rpi.py`
 
-### MacOS M1
+### MacOS (M1 or Intel)
 
 Prerequisites: sox, pysox
 
