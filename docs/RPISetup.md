@@ -1,7 +1,7 @@
 # Recent Raspberry Pi setup docs
 
 
-## Raspberry Pi 3b+ (2017 era_
+## Raspberry Pi 3b+ (2017 era)
 
 Fresh install with Raspian 64bit
 
