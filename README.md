@@ -91,8 +91,6 @@ Prerequisites: Raspberry Pi 4 with clean 64-bit system, `docker`, `docker-compos
 In one terminal, run:
 
 ```
-mkdir audio/inbox
-mkdir audio/post_analyze
 docker compose -f docker-compose.rpi.yml up -d --build
 docker compose -f docker-compose.rpi.yml exec web python manage.py runscript analyze
 ```

@@ -3,13 +3,12 @@
 
 ## Raspberry Pi 3b+ (2017 era)
 
-Fresh install with Raspian 64bit Lite
+Fresh install with Raspberry Pi OS 64bit
 
-Install pulseaudio
+Install pulseaudio (only needed if you're using Raspberry Pi OS Lite)
 `sudo apt install pulseaudio`
 
 Install docker
-
 ```
 sudo apt update && sudo apt upgrade -VV
 
@@ -22,11 +21,9 @@ sudo sh get-docker.sh
 ```
 
 Install pip3
-
 `sudo apt-get install python3-pip`
 
 Install docker-compose
-
 `sudo pip3 install docker-compose`
 
 
@@ -37,3 +34,9 @@ This may take 10-12 minutes.
 `docker compose -f docker-compose.rpi.yml up -d --build`
 
 
+Start the recorder
+`python script_examples/audio_recording_rpi.py`
+
+In another terminal, start the analyzers.
+
+`docker compose -f docker-compose.rpi.yml exec web python manage.py runscript analyze`
