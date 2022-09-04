@@ -4,8 +4,9 @@ services:
   web:
     build:
       context: ./server
-      dockerfile: Dockerfile.pi4
+      dockerfile: Dockerfile.rpi
     command: python manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
     volumes:
       - ./server/:/usr/src/app/
       - ./audio/inbox/:/usr/audio/incoming/

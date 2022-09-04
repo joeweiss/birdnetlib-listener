@@ -7,7 +7,7 @@ COPY ./bin/tflite_runtime-2.6.0-cp39-cp39-linux_aarch64.whl /usr/src/app/
 
 RUN apt-get update; apt-get install -y inotify-tools ffmpeg libsqlite3-mod-spatialite gdal-bin
 
-COPY ./requirements.pi4.txt .
-RUN pip install -r requirements.pi4.txt
+COPY ./requirements.rpi.txt .
+RUN pip install -r requirements.rpi.txt
 
 ADD . .

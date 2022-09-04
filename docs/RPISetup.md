@@ -3,7 +3,10 @@
 
 ## Raspberry Pi 3b+ (2017 era)
 
-Fresh install with Raspian 64bit
+Fresh install with Raspian 64bit Lite
+
+Install pulseaudio
+`sudo apt install pulseaudio`
 
 Install docker
 
@@ -31,7 +34,6 @@ Build the initial image
 
 This may take 10-12 minutes.
 
-`docker compose -f docker-compose.rpi4.yml up -d --build`
-
+`docker compose -f docker-compose.rpi.yml up -d --build`
 
 
