@@ -5,22 +5,22 @@
 ### Raspberry Pi 4 - 64bit
 
 Bring it up and run:
-`docker compose -f docker-compose.rpi4.yml up -d --build`
+`docker compose -f docker-compose.rpi.yml up -d --build`
 
 To run the watcher/analyzer:
-`docker compose -f docker-compose.rpi4.yml exec web python manage.py runscript analyze`
+`docker compose -f docker-compose.rpi.yml exec web python manage.py runscript analyze`
 
 To run the Django test cases:
-`docker compose -f docker-compose.rpi4.yml exec web python manage.py test`
+`docker compose -f docker-compose.rpi.yml exec web python manage.py test`
 
 To take it down:
-`docker compose -f docker-compose.rpi4.yml down`
+`docker compose -f docker-compose.rpi.yml down`
 
 To run bash within the docker instance:
-`docker compose -f docker-compose.rpi4.yml exec web bash`
+`docker compose -f docker-compose.rpi.yml exec web bash`
 
 To rebuild the image for a reason (e.g. after pip change)
-`docker compose -f docker-compose.rpi4.yml down; docker compose -f docker-compose.rpi4.yml build --no-cache`
+`docker compose -f docker-compose.rpi.yml down; docker compose -f docker-compose.rpi.yml build --no-cache`
 
 ### MacOS M1
 
@@ -91,10 +91,8 @@ Prerequisites: Raspberry Pi 4 with clean 64-bit system, `docker`, `docker-compos
 In one terminal, run:
 
 ```
-mkdir audio/inbox
-mkdir audio/post_analyze
-docker compose -f docker-compose.rpi4.yml up -d --build
-docker compose -f docker-compose.rpi4.yml exec web python manage.py runscript analyze
+docker compose -f docker-compose.rpi.yml up -d --build
+docker compose -f docker-compose.rpi.yml exec web python manage.py runscript analyze
 ```
 
 In another terminal, start the recording:
