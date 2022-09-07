@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ species.common_name }}</h1>
+    <h2>Recent detections</h2>
+
+    {% for detection in detections %}
+        <h3>{{ detection.detected_at }}</h3>
+        <p>Confidence: {{ detection.confidence|floatformat:2 }}</p>
+        <p><audio controls>
+            <source src="{{detection.extracted_file.url }}" type="audio/mpeg">
+          Your browser does not support the audio element.
+          </audio></p>
+    {% endfor %}
+{% endblock %}
