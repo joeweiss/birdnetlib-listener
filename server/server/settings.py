@@ -175,3 +175,8 @@ DETECTION_CONFIDENCE_THRESHOLD = float(os.environ.get(
     "DETECTION_CONFIDENCE_THRESHOLD",
     0.7,
 ))
+
+DOMAIN = os.environ.get(
+    "SITE_DOMAIN",
+    "example.com",
+)
