@@ -11,6 +11,8 @@ from django.conf import settings
 from datetime import timedelta
 from django.utils import timezone
 from django.utils.text import slugify
+
+
 import tempfile
 
 # import pytz
@@ -71,7 +73,7 @@ def send_notification_for_detection(detection, notification_config):
 
     title = NOTIFICATION_DETECTION_TYPES[notification_config.detection_type]
     result = apobj.notify(
-        body=f"{detection.species.common_name} - confidence @ {detection.confidence:.2f} http://rp3-lite64.local:8000/species/{detection.species.id}/",
+        body=f"{detection.species.common_name} - confidence @ {detection.confidence:.2f} http://{settings.DOMAIN}/species/{detection.species.id}/",
         title=f"{title}",
     )
 
