@@ -72,8 +72,10 @@ def send_notification_for_detection(detection, notification_config):
     apobj.add(notification_config.apprise_string)
 
     title = NOTIFICATION_DETECTION_TYPES[notification_config.detection_type]
+    body_with_url = f"{detection.species.common_name} - confidence @ {detection.confidence:.2f} http://{settings.DOMAIN}/species/{detection.species.id}/"
+    body_without_url = f"{detection.species.common_name} - confidence @ {detection.confidence:.2f}"
     result = apobj.notify(
-        body=f"{detection.species.common_name} - confidence @ {detection.confidence:.2f} http://{settings.DOMAIN}/species/{detection.species.id}/",
+        body=body_without_url,
         title=f"{title}",
     )
 
