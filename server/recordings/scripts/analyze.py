@@ -90,9 +90,14 @@ def main():
 
     directory = recording_dir
 
-    analyzer_lite = LiteAnalyzer()
+    # Use both analyzers.
+    # analyzer_lite = LiteAnalyzer()
+    # analyzer = Analyzer()
+    # analyzers = [analyzer, analyzer_lite]
+
+    # Use a single analyzer.
     analyzer = Analyzer()
-    analyzers = [analyzer, analyzer_lite]
+    analyzers = [analyzer]
 
     lon = -77.3664
     lat = 35.6127
