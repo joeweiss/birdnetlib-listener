@@ -98,7 +98,7 @@ docker compose -f docker-compose.rpi.yml exec web python manage.py runscript ana
 In another terminal, start the recording:
 
 ```
-python script_examples/audio_recording_macos.py
+python script_examples/audio_recording_rpi.py
 ```
 
 ### Setup systemd to auto-start the analyze and recording processes on boot
