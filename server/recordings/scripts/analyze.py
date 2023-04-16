@@ -16,6 +16,7 @@ import shutil
 
 RECORDING_DIR = settings.INGEST_WAV_FILE_DIRECTORY
 OUTPUT_DIR = settings.OUTPUT_WAV_FILE_DIRECTORY
+ARCHIVE_AUDIO_FILES = False
 DELETE_IF_NO_DETECTIONS = True
 PROCESS_EXISTING_BEFORE_WATCHING = True
 
@@ -53,6 +54,9 @@ def on_analyze_file_complete(recording_list):
         pprint(recording.detections)
         num_detections = num_detections + len(recording.detections)
         print("---------------------------")
+    if ARCHIVE_AUDIO_FILES == False:
+        print("Deleting", recording.path)
+        os.remove(recording.path)
     if num_detections == 0 and DELETE_IF_NO_DETECTIONS:
         print("Deleting", recording.path)
         os.remove(recording.path)
