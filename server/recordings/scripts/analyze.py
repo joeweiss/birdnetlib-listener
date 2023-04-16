@@ -57,6 +57,7 @@ def on_analyze_file_complete(recording_list):
     if ARCHIVE_AUDIO_FILES == False:
         print("Deleting", recording.path)
         os.remove(recording.path)
+        return
     if num_detections == 0 and DELETE_IF_NO_DETECTIONS:
         print("Deleting", recording.path)
         os.remove(recording.path)
