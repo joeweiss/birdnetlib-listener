@@ -1,0 +1,12 @@
+[Unit]
+Description=Audio recording service
+After=network.target
+
+[Service]
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+User=joeweiss
+Group=joeweiss
+ExecStart=cd /home/joeweiss/birdnetlib-docker-django; docker compose exec web python manage.py runscript analyze
+
+[Install]
+WantedBy=multi-user.target
