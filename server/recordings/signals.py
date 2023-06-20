@@ -17,6 +17,7 @@ def detection_post_save(sender, instance, created, **kwargs):
                 send_notification_for_detection(instance, config)
 
             # Send on NOTIFICATION_DETECTION_TYPES.new_daily if is_unique_daily_detection
+            instance.refresh_from_db()
             if (
                 instance.is_unique_daily_detection
                 and config.detection_type == NOTIFICATION_DETECTION_TYPES.new_daily

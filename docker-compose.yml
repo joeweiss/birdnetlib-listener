@@ -13,6 +13,7 @@ services:
       - ./audio/post_analyze/:/usr/audio/analyzed/
     ports:
       - 8000:8000
+      - 8080:8080
     env_file:
       - ./.env.dev
   analyzer:

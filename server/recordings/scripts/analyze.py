@@ -11,7 +11,7 @@ from birdnetlib.watcher import DirectoryWatcher
 from birdnetlib.batch import DirectoryAnalyzer
 from birdnetlib.analyzer_lite import LiteAnalyzer
 from birdnetlib.analyzer import Analyzer
-from recordings.utils import import_from_recording
+from recordings.utils import import_from_recording, alert_tidbyt
 import shutil
 
 RECORDING_DIR = settings.INGEST_WAV_FILE_DIRECTORY
@@ -19,6 +19,7 @@ OUTPUT_DIR = settings.OUTPUT_WAV_FILE_DIRECTORY
 ARCHIVE_AUDIO_FILES = False
 DELETE_IF_NO_DETECTIONS = True
 PROCESS_EXISTING_BEFORE_WATCHING = True
+ALERT_TO_TIDBYT = True
 
 DETECTION_CONFIDENCE_THRESHOLD = settings.DETECTION_CONFIDENCE_THRESHOLD
 
@@ -44,7 +45,6 @@ def on_analyze_file_complete(recording_list):
 
     num_detections = 0
     for recording in recording_list:
-
         # Only import recordings with detections.
         if len(recording.detections) == 0:
             continue
@@ -54,6 +54,11 @@ def on_analyze_file_complete(recording_list):
         pprint(recording.detections)
         num_detections = num_detections + len(recording.detections)
         print("---------------------------")
+    
+    if num_detections > 0 and ALERT_TO_TIDBYT:
+        alert_tidbyt()
+
+
     if ARCHIVE_AUDIO_FILES == False:
         print("Deleting", recording.path)
         os.remove(recording.path)
