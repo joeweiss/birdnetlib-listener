@@ -11,7 +11,7 @@ def main():
         recent = ", ".join(data.get("recent_birds"))
     daily_count = str(int(data.get("daily_count", 0)))
     return render.Root(
-        delay=60,
+        delay=30,
         child = render.Column(
             expanded=True,
             main_align="space_evenly",
