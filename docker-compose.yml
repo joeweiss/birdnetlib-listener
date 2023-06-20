@@ -28,3 +28,27 @@ services:
       - ./audio/post_analyze/:/usr/audio/analyzed/
     env_file:
       - ./.env.dev
+  consumer:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.rpi
+    command: python manage.py run_huey -f
+    restart: unless-stopped
+    volumes:
+      - ./server/:/usr/src/app/
+      - ./audio/inbox/:/usr/audio/incoming/
+      - ./audio/post_analyze/:/usr/audio/analyzed/
+    links:
+    - redis:redis
+    depends_on:
+    - redis
+    environment:
+    - PYTHONUNBUFFERED=1
+    env_file:
+    - .env.dev
+  redis:
+    image: redis
+    hostname: redis
+    restart: unless-stopped
+    ports:
+    - 6379:6379

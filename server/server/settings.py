@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "django_extensions",
+    "bx_django_utils",
+    "huey.contrib.djhuey",
+    "huey_monitor",
     "authuser",
     "recordings",
 ]
@@ -180,3 +183,11 @@ DOMAIN = os.environ.get(
     "SITE_DOMAIN",
     "example.com",
 )
+
+HUEY = {
+    "immediate": False,
+    "connection": {
+        "host": "redis",
+        "port": 6379,
+    },
+}
