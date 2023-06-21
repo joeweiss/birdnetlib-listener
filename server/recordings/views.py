@@ -4,8 +4,11 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import datetime
-from datetime import timedelta
+
+# from datetime import timedelta
+from django.utils.timezone import timedelta
 from django.db.models import Q
+from django.db.models import Count
 
 
 class DetectionListView(ListView):
@@ -30,6 +33,11 @@ class DetectionSpeciesListView(ListView):
         return context
 
 
+def remove_duplicates(lst):
+    seen = set()
+    return [x for x in lst if not (x in seen or seen.add(x))]
+
+
 def latest(request):
     latest_detection = Detection.objects.all().order_by("-detected_at").first()
     today = timezone.now()
@@ -40,6 +48,7 @@ def latest(request):
         .distinct()
         .count()
     )
+    # Recent birds (Deprecated)
     last_10_minutes = timezone.now() - timedelta(hours=0, minutes=20)
     latest_species = (
         Detection.objects
@@ -49,8 +58,56 @@ def latest(request):
         .values_list("species__common_name", flat=True)
     )
     recent_birds = [i for i in latest_species]
-    return JsonResponse({
-        "name": latest_detection.species.common_name,
-        "daily_count": species_today_count,
-        "recent_birds": recent_birds
-    })
+
+    # Last minute
+    last_minute_dt = timezone.now() - timedelta(hours=0, minutes=2)
+    _species = (
+        Detection.objects.filter(detected_at__gte=last_minute_dt)
+        .filter(detected_at__lte=timezone.now())
+        .order_by("-detected_at")
+        .values("species__common_name")
+        .values_list("species__common_name", flat=True)
+    )
+    last_minute = remove_duplicates([i for i in _species])
+
+    # Last hour
+    last_hour_dt = timezone.now() - timedelta(hours=1, minutes=0)
+    _species = (
+        Detection.objects.filter(detected_at__gte=last_hour_dt)
+        .filter(detected_at__lte=timezone.now())
+        .order_by("-detected_at")
+        .values("species__common_name")
+        .values_list("species__common_name", flat=True)
+    )
+    last_hour = remove_duplicates([i for i in _species])
+
+    # most_common today
+    today = timezone.now()
+    _species = (
+        Detection.objects.filter(detected_at__date=today)
+        .values("species__common_name")
+        .annotate(count=Count("species__common_name"))
+        .order_by("-count")
+    )
+
+    max_count = max([i["count"] for i in _species])
+    most_common = [
+        i["species__common_name"] for i in _species if i["count"] == max_count
+    ]
+
+    min_count = min([i["count"] for i in _species])
+    least_common = [
+        i["species__common_name"] for i in _species if i["count"] == min_count
+    ]
+
+    return JsonResponse(
+        {
+            "name": latest_detection.species.common_name,
+            "daily_count": species_today_count,
+            "recent_birds": recent_birds,
+            "last_minute": last_minute,
+            "last_hour": last_hour,
+            "most_common": most_common,
+            "least_common": least_common,
+        }
+    )

@@ -4,11 +4,11 @@ load('http.star', 'http')
 def main():
     response = http.get("http://web:8000/latest/")
     data = response.json()
-    recent_bird_list = data.get("recent_birds")
+    recent_bird_list = data.get("last_hour")
     if len(recent_bird_list) == 0:
         recent = "It's quiet now"
     else:
-        recent = ", ".join(data.get("recent_birds"))
+        recent = ", ".join(data.get("last_hour"))
     daily_count = str(int(data.get("daily_count", 0)))
     return render.Root(
         delay=30,

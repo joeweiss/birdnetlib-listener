@@ -145,3 +145,5 @@ audio/post_analyze/*
 !audio/post_analyze/README.md
 requirements.dev.txt
 server/pixlets/*.webp
+
+.vscode
