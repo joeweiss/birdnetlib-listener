@@ -119,8 +119,7 @@ class DetectionsTestCase(TestCase):
         Analyzer = namedtuple("Analyzer", ["name", "model_name"])
         analyzer = Analyzer("Analyzer", "BirdNET-Analyzer")
 
-        naive_datetime = datetime.utcnow() - timedelta(hours=0, minutes=1)
-        print(naive_datetime)
+        naive_datetime = datetime.now() - timedelta(hours=0, minutes=1)
 
         recording = BirdnetlibRecording(
             "recordings/tests/files/audio.wav",
