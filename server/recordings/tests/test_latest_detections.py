@@ -119,7 +119,8 @@ class DetectionsTestCase(TestCase):
         Analyzer = namedtuple("Analyzer", ["name", "model_name"])
         analyzer = Analyzer("Analyzer", "BirdNET-Analyzer")
 
-        naive_datetime = datetime.now() - timedelta(hours=0, minutes=1)
+        naive_datetime = datetime.utcnow() - timedelta(hours=0, minutes=1)
+        print(naive_datetime)
 
         recording = BirdnetlibRecording(
             "recordings/tests/files/audio.wav",
@@ -133,6 +134,7 @@ class DetectionsTestCase(TestCase):
         # print(recording)
 
         rec_obj = import_from_recording(recording)
+        self.assertEqual(rec_obj.recording_started, timezone.make_aware(naive_datetime))
         # print("rec_obj", rec_obj)
         self.assertEqual(rec_obj.id > 0, True)
 

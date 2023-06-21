@@ -98,3 +98,9 @@ Copy recording service
 Allow login to linger for the user (for pulseaudio to prevent /run/user/1000/pulse error)
 
 `sudo loginctl enable-linger $USER`
+
+Change the server to the appropriate time zone
+
+`sudo timedatectl set-timezone America/New_York`
+
+Also change the timezone in the settings.py file.
