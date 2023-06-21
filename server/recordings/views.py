@@ -79,12 +79,12 @@ def latest(request):
         .order_by("-count")
     )
 
-    max_count = max([i["count"] for i in _species])
+    max_count = max([i["count"] for i in _species], default=0)
     most_common = [
         i["species__common_name"] for i in _species if i["count"] == max_count
     ]
 
-    min_count = min([i["count"] for i in _species])
+    min_count = min([i["count"] for i in _species], default=0)
     least_common = [
         i["species__common_name"] for i in _species if i["count"] == min_count
     ]
