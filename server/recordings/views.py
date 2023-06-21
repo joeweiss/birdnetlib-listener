@@ -39,7 +39,6 @@ def remove_duplicates(lst):
 
 
 def latest(request):
-    latest_detection = Detection.objects.all().order_by("-detected_at").first()
     today = timezone.now()
     species_today_count = (
         Detection.objects.all()
@@ -48,16 +47,6 @@ def latest(request):
         .distinct()
         .count()
     )
-    # Recent birds (Deprecated)
-    last_10_minutes = timezone.now() - timedelta(hours=0, minutes=20)
-    latest_species = (
-        Detection.objects
-        .filter(Q(detected_at__gte=last_10_minutes))
-        .values('species__common_name')
-        .distinct()
-        .values_list("species__common_name", flat=True)
-    )
-    recent_birds = [i for i in latest_species]
 
     # Last minute
     last_minute_dt = timezone.now() - timedelta(hours=0, minutes=2)
@@ -102,9 +91,7 @@ def latest(request):
 
     return JsonResponse(
         {
-            "name": latest_detection.species.common_name,
             "daily_count": species_today_count,
-            "recent_birds": recent_birds,
             "last_minute": last_minute,
             "last_hour": last_hour,
             "most_common": most_common,
