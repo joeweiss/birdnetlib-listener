@@ -7,7 +7,7 @@ import signal
 
 
 def main():
-    recording_dir = "audio/inbox"
+    recording_dir = "/home/joeweiss/birdnetlib-docker-django/audio/inbox"
     duration_secs = 15
 
     arecord_command_list = [
@@ -44,4 +44,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print("starting")
     main()

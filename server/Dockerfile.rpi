@@ -10,4 +10,9 @@ RUN apt-get update; apt-get install -y inotify-tools ffmpeg libsqlite3-mod-spati
 COPY ./requirements.rpi.txt .
 RUN pip install -r requirements.rpi.txt
 
+RUN curl -LO https://github.com/tidbyt/pixlet/releases/download/v0.27.1/pixlet_0.27.1_linux_arm64.tar.gz
+RUN tar -xvf pixlet_0.27.1_linux_arm64.tar.gz
+RUN mv pixlet /usr/local/bin
+RUN pixlet version
+
 ADD . .

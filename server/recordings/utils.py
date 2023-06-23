@@ -111,3 +111,8 @@ def extract_detection_audio_file(detection):
 
     detection.extracted = True
     detection.save()
+
+
+def alert_tidbyt():
+    # Post to pixlet.
+    os.system("cd /usr/src/app/pixlets/; sh push.sh")

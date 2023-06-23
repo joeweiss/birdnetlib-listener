@@ -1,26 +1,38 @@
-# birdnetlib-listener
+# birdnetlib-listener-device
+
+## Purpose
+
+This repo is the source for a remote recording device, initially targeted to run on a Raspberry Pi 3 or 4. The source is provided as-is; much complexity is left to the user.
+
+This project is individualized to some site-specific needs:
+* Docker-based and Django-based
+* Notifications via [Apprise](https://pypi.org/project/apprise/)
+* Integration with [Tidbyt](https://tidbyt.com/)
+* No user interface beyond what's provided by Django Admin.
+
+If you're looking for something more robust and user friendly, please try the [BirdNET-Pi](https://github.com/mcguirepr89/BirdNET-Pi) project.
 
 ## Running in Docker
 
 ### Raspberry Pi 4 - 64bit
 
 Bring it up and run:
-`docker compose -f docker-compose.rpi.yml up -d --build`
+`docker compose up -d --build`
 
 To run the watcher/analyzer:
-`docker compose -f docker-compose.rpi.yml exec web python manage.py runscript analyze`
+`docker compose exec web python manage.py runscript analyze`
 
 To run the Django test cases:
-`docker compose -f docker-compose.rpi.yml exec web python manage.py test`
+`docker compose exec web python manage.py test`
 
 To take it down:
-`docker compose -f docker-compose.rpi.yml down`
+`docker compose down`
 
 To run bash within the docker instance:
-`docker compose -f docker-compose.rpi.yml exec web bash`
+`docker compose exec web bash`
 
 To rebuild the image for a reason (e.g. after pip change)
-`docker compose -f docker-compose.rpi.yml down; docker compose -f docker-compose.rpi.yml build --no-cache`
+`docker compose down; docker compose build --no-cache`
 
 ### MacOS M1
 
@@ -42,25 +54,6 @@ To run bash within the docker instance:
 To rebuild the image for a reason (e.g. after pip change)
 `docker compose -f docker-compose.macm1.yml down; docker compose -f docker-compose.macm1.yml build --no-cache`
 
-### MacOS Intel
-
-Bring it up and run:
-`docker compose -f docker-compose.macintel.yml up -d --build`
-
-To run the watcher/analyzer:
-`docker compose -f docker-compose.macintel.yml exec web python manage.py runscript analyze`
-
-To run the Django test cases:
-`docker compose -f docker-compose.macintel.yml exec web python manage.py test`
-
-To take it down:
-`docker compose -f docker-compose.macintel.yml down`
-
-To run bash within the docker instance:
-`docker compose -f docker-compose.macintel.yml exec web bash`
-
-To rebuild the image for a reason (e.g. after pip change)
-`docker compose -f docker-compose.macintel.yml down; docker compose -f docker-compose.macintel.yml build --no-cache`
 
 ## Recording audio
 
@@ -92,8 +85,8 @@ In one terminal, run:
 
 ```
 # You can omit the build option if you've run this in the past.
-docker compose -f docker-compose.rpi.yml up -d --build
-docker compose -f docker-compose.rpi.yml exec web python manage.py runscript analyze
+docker compose up -d --build
+docker compose exec web python manage.py runscript analyze
 ```
 
 In another terminal, start the recording:
@@ -105,3 +98,26 @@ python script_examples/audio_recording_rpi.py
 ### Setup systemd to auto-start the analyze and recording processes on boot
 
 <snip> More to come ...
+
+
+### MacOS Intel
+
+**These instructions are deprecated as of mid-2023. Intel Mac support is not kept up to date.**
+
+Bring it up and run:
+`docker compose -f docker-compose.macintel.yml up -d --build`
+
+To run the watcher/analyzer:
+`docker compose -f docker-compose.macintel.yml exec web python manage.py runscript analyze`
+
+To run the Django test cases:
+`docker compose -f docker-compose.macintel.yml exec web python manage.py test`
+
+To take it down:
+`docker compose -f docker-compose.macintel.yml down`
+
+To run bash within the docker instance:
+`docker compose -f docker-compose.macintel.yml exec web bash`
+
+To rebuild the image for a reason (e.g. after pip change)
+`docker compose -f docker-compose.macintel.yml down; docker compose -f docker-compose.macintel.yml build --no-cache`
