@@ -6,7 +6,7 @@ def main():
     data = response.json()
     print(data)
 
-    title = "Most commonly heard today"
+    title = "Most common today"
     key = "most_common"
     color = "#fff26e"
 

@@ -11,7 +11,7 @@ def main():
         recent = ", ".join(data.get("last_hour"))
     daily_count = str(int(data.get("daily_count", 0)))
     return render.Root(
-        delay=30,
+        delay=20,
         child = render.Column(
             expanded=True,
             main_align="space_evenly",
@@ -19,15 +19,15 @@ def main():
             children = [
                 #render.Box(width=64, height=2, color="#880ED4"),
                 render.Text(
-                    "Recent birds",
+                    "Last hour",
                     font="CG-pixel-3x5-mono",
                     color="#880ED4"
                 ),
                 render.Marquee(
                     width=64,
                     child=render.Text(recent),
-                    offset_start=5,
-                    offset_end=32,
+                    #offset_start=5,
+                    #offset_end=32,
                 ),
                 render.Text(
                     daily_count + " species today",
