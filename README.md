@@ -105,3 +105,9 @@ python script_examples/audio_recording_rpi.py
 ### Setup systemd to auto-start the analyze and recording processes on boot
 
 <snip> More to come ...
+
+### Adjusting audio level
+
+```
+alsamixer
+```
