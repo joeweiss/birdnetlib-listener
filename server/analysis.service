@@ -1,0 +1,13 @@
+[Unit]
+Description=Audio recording service
+After=network.target
+
+[Service]
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+User=mccaskey
+Group=mccaskey
+WorkingDirectory=/home/mccaskey/Code/birdnetlib-listener-device
+ExecStart=docker compose exec web python manage.py runscript analyze
+
+[Install]
+WantedBy=multi-user.target

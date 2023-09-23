@@ -1,0 +1,13 @@
+[Unit]
+Description=Audio recording service
+
+[Service]
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Restart=always
+Type=simple
+RestartSec=3
+User=mccaskey
+ExecStart=python /home/mccaskey/Code/birdnetlib-listener-device/script_examples/audio_recording_rpi.py
+
+[Install]
+WantedBy=multi-user.target

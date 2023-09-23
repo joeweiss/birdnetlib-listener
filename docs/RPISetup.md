@@ -47,3 +47,43 @@ Start the recorder
 In another terminal, start the analyzers.
 
 `docker compose -f docker-compose.rpi.yml exec web python manage.py runscript analyze`
+
+
+## Setup services
+
+```
+# Setup docker to start on boot
+sudo systemctl enable docker
+
+```
+
+```
+# Edit to change paths to your own home directory
+pico server/recording.service
+pico server/analysis.service
+
+# Copy to service directory
+sudo cp server/recording.service /etc/systemd/system/
+sudo cp server/analysis.service /etc/systemd/system/
+
+
+# Start the service
+sudo systemctl start recording.service
+sudo systemctl start analysis.service
+
+# Check to see that it is running
+sudo systemctl status recording.service
+sudo systemctl status analysis.service
+
+# If all goes well, enable them both.
+sudo systemctl enable recording.service
+sudo systemctl enable analysis.service
+
+# Reboot and confirm the services are running.
+sudo reboot
+
+
+
+```
+
+
