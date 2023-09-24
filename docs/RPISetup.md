@@ -87,3 +87,8 @@ sudo reboot
 ```
 
 
+## Setup kiosk mode
+
+Mostly adapted from here:
+https://www.raspberrypi.com/tutorials/how-to-use-a-raspberry-pi-in-kiosk-mode/
+
