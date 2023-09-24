@@ -4,25 +4,23 @@
 <head>
     <meta charset="utf-8">
     <title>Minimalistic Vue JS</title>
-    <script type="text/javascript" src="http://unpkg.com/vue@3"></script>
+    <script type="text/javascript" src="vue.global.js"></script>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
     <div id="app">
-        {{ message }}
+        <h1>{{ message }}</h1>
     </div>
 </body>
+
+<script type="text/javascript" src="kiosk.js"></script>
+
 <script>
-    Vue.createApp({
-        data() {
-            return {
-                message: "Loading ..."
-            }
-        },
-        mounted() {
-            this.message = "Hello, World!";
-        }
-    }).mount("#app")
+    // Leave the reload outside of kiosk.js.
+    setTimeout(() => {
+        window.location.reload();
+    }, 30 * 1000);
 </script>
 
 </html>
