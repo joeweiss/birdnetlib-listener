@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Minimalistic Vue JS</title>
+    <script type="text/javascript" src="http://unpkg.com/vue@3"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{ message }}
+    </div>
+</body>
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                message: "Loading ..."
+            }
+        },
+        mounted() {
+            this.message = "Hello, World!";
+        }
+    }).mount("#app")
+</script>
+
+</html>
