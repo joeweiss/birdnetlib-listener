@@ -2,7 +2,7 @@ load("render.star", "render")
 load('http.star', 'http')
 
 def main():
-    response = http.get("http://web:8000/latest/")
+    response = http.get("http://web:8000/latest/", ttl_seconds = 60)
     data = response.json()
     recent_bird_list = data.get("last_hour")
     if len(recent_bird_list) == 0:

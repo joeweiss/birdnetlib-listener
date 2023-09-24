@@ -2,11 +2,13 @@ load("render.star", "render")
 load('http.star', 'http')
 
 def main():
-    response = http.get("http://web:8000/latest/")
+    response = http.get("http://web:8000/latest/", ttl_seconds = 60)
     data = response.json()
 
     if len(data.get("last_minute")) < 2:
         bird = data.get("last_minute")[0] if len(data.get("last_minute")) == 1 else ""
+        if bird == "":
+            return
         return render.Root(
             child = render.Column(
                 expanded=True,
@@ -22,6 +24,8 @@ def main():
         )
     else:
         birds = ", ".join(data.get("last_minute"))
+        if birds == "":
+            return
         return render.Root(
             child = render.Column(
                 expanded=True,

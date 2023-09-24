@@ -9,6 +9,7 @@ from datetime import datetime
 from django.utils.timezone import timedelta
 from django.db.models import Q
 from django.db.models import Count
+from django.views.decorators.cache import cache_page
 
 
 class DetectionListView(ListView):
@@ -38,6 +39,7 @@ def remove_duplicates(lst):
     return [x for x in lst if not (x in seen or seen.add(x))]
 
 
+@cache_page(60 * 4)
 def latest(request):
     today = timezone.now()
     species_today_count = (
@@ -96,5 +98,6 @@ def latest(request):
             "last_hour": last_hour,
             "most_common": most_common,
             "least_common": least_common,
+            "now": str(timezone.now()),
         }
     )
