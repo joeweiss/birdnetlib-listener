@@ -6,11 +6,12 @@ Vue.createApp({
     },
     mounted() {
         this.message = "Hello, World! I'm a bird computer. " + Date();
-        // Refresh in 10 seconds
-        setTimeout(() => {
-            window.location.reload();
-        }, 30 * 1000);
-
+        // Refresh every second.
+        let _this = this;
+        setInterval(() => {
+            _this.message = "Hello, World! I'm a bird computer. " + Date();
+        }, 1000);
     }
 }).mount("#app");
+
 
