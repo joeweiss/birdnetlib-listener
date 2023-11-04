@@ -1,15 +1,9 @@
 from django.views.generic import ListView
 from recordings.models import Detection, Species
-from django.shortcuts import get_object_or_404
-
-
-class DetectionListView(ListView):
-    queryset = Detection.objects.order_by("-detected_at")[0:30]
-    context_object_name = "detections"
+from django.shortcuts import get_object_or_404, HttpResponse
 
 
 class DetectionSpeciesListView(ListView):
-
     template_name = "recordings/detection_by_species_list.html"
     context_object_name = "detections"
 
@@ -23,3 +17,7 @@ class DetectionSpeciesListView(ListView):
         context = super(DetectionSpeciesListView, self).get_context_data(**kwargs)
         context["species"] = self.species
         return context
+
+
+def index(request):
+    return HttpResponse("Hello, World!")

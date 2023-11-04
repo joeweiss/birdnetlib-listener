@@ -35,7 +35,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1 localhost").split(' ') 
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1 localhost").split(" ")
 
 # Application definition
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "django_extensions",
+    "rest_framework",
     "authuser",
     "recordings",
 ]
@@ -140,7 +141,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 STATICFILES_DIRS = [
     # BASE_DIR / "static",
-    '/usr/src/app/staticfiles/',
+    "/usr/src/app/staticfiles/",
 ]
 
 MEDIA_URL = "/media/"
@@ -175,12 +176,28 @@ DETECTION_EXTRACTION_BITRATE = os.environ.get(
     "DETECTION_EXTRACTION_BITRATE",
     320,
 )
-DETECTION_CONFIDENCE_THRESHOLD = float(os.environ.get(
-    "DETECTION_CONFIDENCE_THRESHOLD",
-    0.7,
-))
+DETECTION_CONFIDENCE_THRESHOLD = float(
+    os.environ.get(
+        "DETECTION_CONFIDENCE_THRESHOLD",
+        0.7,
+    )
+)
 
 DOMAIN = os.environ.get(
     "SITE_DOMAIN",
     "example.com",
 )
+
+
+FLICKR_BLACKLIST_IDS = os.environ.get("FLICKR_BLACKLIST_IDS", "").split(" ")
+FLICKR_KEY = os.environ.get("FLICKR_KEY")
+FLICKR_SECRET = os.environ.get("FLICKR_SECRET")
+FLICKR_RESULTS_CACHE_SECONDS = 60 * 1  # 1 minute
+
+# Light-weight, only really for Flickr image urls.
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "birds-cache",
+    }
+}

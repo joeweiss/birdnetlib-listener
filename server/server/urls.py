@@ -18,9 +18,38 @@ from django.urls import include, path
 
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
+from recordings import viewsets
+
+router = routers.DefaultRouter()
+router.register(r"users", viewsets.UserViewSet, basename="users")
+router.register(r"detections", viewsets.DetectionViewSet, basename="detections")
+router.register(r"species", viewsets.SpeciesViewSet, basename="species")
+
+router.register(
+    r"today-detections", viewsets.DailyDetectionViewSet, basename="today-detections"
+)
+router.register(
+    r"now-detections", viewsets.NowDetectionViewSet, basename="now-detections"
+)
+router.register(
+    r"daily-species", viewsets.DailySpeciesViewSet, basename="today-species"
+)
+
+
+urlpatterns = (
+    # path("api/", include(router.urls)),
+    [
+        path("admin/", admin.site.urls),
+        path("", include(("recordings.urls", "recordings"), namespace="recordings")),
+    ]
+    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+)
 
 urlpatterns = (
     [
+        path("api/", include(router.urls)),
         path("admin/", admin.site.urls),
         path("", include(("recordings.urls", "recordings"), namespace="recordings")),
     ]

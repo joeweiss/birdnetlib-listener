@@ -16,6 +16,8 @@ dj-database-url==1.0.0
 Django==3.2.15
 django-extensions==3.2.0
 django-model-utils==4.2.0
+djangorestframework==3.14.0
+flickr-api==0.7.7
 idna==3.3
 importlib-metadata==4.12.0
 iniconfig==1.1.1

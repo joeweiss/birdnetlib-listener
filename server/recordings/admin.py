@@ -23,6 +23,13 @@ class AnalyzerAdmin(admin.ModelAdmin):
 admin.site.register(app_models.Analyzer, AnalyzerAdmin)
 
 
+class AnalysisAdmin(admin.ModelAdmin):
+    list_display = ["recording", "analyzer"]
+
+
+admin.site.register(app_models.Analysis, AnalysisAdmin)
+
+
 class DetectionAdmin(admin.ModelAdmin):
     list_display = [
         "species",

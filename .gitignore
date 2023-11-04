@@ -144,3 +144,7 @@ audio/post_analyze/*
 !audio/inbox/README.md
 !audio/post_analyze/README.md
 requirements.dev.txt
+
+docker-compose.override.yml
+.autoenv
+
