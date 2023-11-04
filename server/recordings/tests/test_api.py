@@ -1,4 +1,5 @@
 from django.test import TestCase
+from unittest import skipIf
 from django.contrib.auth import get_user_model
 from random import choice
 from rest_framework.test import APIClient
@@ -8,6 +9,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Count
 from pprint import pprint
+from django.conf import settings
 
 User = get_user_model()
 
@@ -118,13 +120,16 @@ class ApiTestCase(TestCase):
         data = response.json()
         self.assertEqual(len(data), len(species_today))
 
-    def test_flickr(self):
+    @skipIf(
+        (settings.FLICKR_KEY is None), "Skip this if Flickr credentials are not set."
+    )
+    def test_flickr_unmocked(self):
         species = app_models.Species.objects.create(
             common_name="American Crow", scientific_name="Corvus brachyrhynchos"
         )
-        print(species)
+        # print(species)
         client = APIClient()
         response = client.get(f"/api/species/{species.id}/image/")
         self.assertEqual(response.status_code, 200)
-
-        pprint(response.json())
+        self.assertTrue("url" in response.json())
+        # pprint(response.json())
