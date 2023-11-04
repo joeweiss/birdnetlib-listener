@@ -201,3 +201,10 @@ CACHES = {
         "LOCATION": "birds-cache",
     }
 }
+
+OPENWEATHERAPI_KEY = os.environ.get("OPENWEATHERAPI_KEY")
+
+LONGITUDE = os.environ.get("LONGITUDE")
+LATITUDE = os.environ.get("LATITUDE")
+PLACE_NAME = os.environ.get("PLACE_NAME")
+WEATHER_CACHE_SECONDS = 60 * 10

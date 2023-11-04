@@ -1,26 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>Minimalistic Vue JS</title>
     <script type="text/javascript" src="vue.global.js"></script>
     <link rel="stylesheet" href="styles.css" />
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <h1>{{ message }}</h1>
+      <div class="centered-div">
+        <!-- Detection -->
+        <div v-if="view == 'detections'">
+          <div v-if="detectionsNow.length > 0">
+            <div v-for="detection in detectionsNow">
+              <h2>Now hearing</h2>
+              <h1>{{ detection.species.common_name }}</h1>
+              <div v-if="detection.species.id in speciesImages">
+                <img
+                  :src="speciesImages[detection.species.id]"
+                  class="scaled-image"
+                />
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <h1>It's all quiet out there now.</h1>
+          </div>
+        </div>
+
+        <!-- Weather -->
+
+        <div v-if="view == 'weather' && weatherLoaded">
+          <h2>Your current weather in {{ weatherCurrent.name }}</h2>
+          <h1>Temp: {{ parseInt(weatherCurrent.main.temp) }} F</h1>
+          <h1>Conditions: {{ weatherCurrent.weather[0].main}}</h1>
+          <h1>Feels like: {{ parseInt(weatherCurrent.main.feels_like) }} F</h1>
+        </div>
+
+        <!-- Daily list -->
+        <div v-if="view == 'daily'">
+          <h2>Top birds detected today</h2>
+            <table>
+              <tr>
+                <th>Species</th>
+                <th>Detections</th>
+              </tr>
+              <tr v-for="species in detectionsToday">
+                <td>{{species.common_name}}</td>
+                <td>{{species.count}}</td>
+              </tr>
+            </table>
+        </div>
+      </div>
+
+      <div id="openweathermap-widget-11"></div>
+
+      <div class="float-bottom">
+        <h1 @click="callShutdown">{{ message }}</h1>
+      </div>
     </div>
-</body>
+  </body>
 
-<script type="text/javascript" src="kiosk.js"></script>
+  <script type="text/javascript" src="kiosk.js"></script>
 
-<!-- <script>
+  <!-- <script>
     // Leave the reload outside of kiosk.js.
     setTimeout(() => {
         window.location.reload();
     }, 30 * 1000);
 </script> -->
+
+
+
+
 
 </html>

@@ -5,7 +5,11 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from django.utils import timezone
 from recordings.models import Detection
-import flickr_api
+import requests
+from django.conf import settings
+from pprint import pprint
+
+from django.views.decorators.cache import cache_page
 
 
 class ListUsers(APIView):
@@ -39,6 +43,29 @@ def daily_bird_report(request):
     return Response({"detections": f"what, world!{today_detections}"})
 
 
+@cache_page(settings.WEATHER_CACHE_SECONDS)
 @api_view()
-def get_flickr_image(request, species_id):
-    return Response({"detections": "yo"})
+def get_weather_conditions(request):
+    lat = settings.LATITUDE
+    lon = settings.LONGITUDE
+    key = settings.OPENWEATHERAPI_KEY
+    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}&units=imperial"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return Response(response.json())
+
+    return Response({})
+
+
+@cache_page(settings.WEATHER_CACHE_SECONDS)
+@api_view()
+def get_weather_forecast(request):
+    lat = settings.LATITUDE
+    lon = settings.LONGITUDE
+    key = settings.OPENWEATHERAPI_KEY
+    url = f"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={key}&units=imperial&cnt=7"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return Response(response.json())
+
+    return Response({})

@@ -133,3 +133,21 @@ class ApiTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue("url" in response.json())
         # pprint(response.json())
+
+    @skipIf(
+        (settings.OPENWEATHERAPI_KEY is None),
+        "Skip this if Open Weather credentials are not set.",
+    )
+    def test_weather_unmocked(self):
+        # print(species)
+        client = APIClient()
+
+        # Current
+        response = client.get("/api/weather/current/")
+        self.assertEqual(response.status_code, 200)
+        pprint(response.json())
+
+        # Forecast
+        response = client.get("/api/weather/forecast/")
+        self.assertEqual(response.status_code, 200)
+        pprint(response.json())

@@ -3,6 +3,65 @@ h1 {
     font-size: 5em;
 }
 
+h2 {
+    color: white;
+    font-size: 2em;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+color: white; /* Text color */
+background-color: black; /* Background color */
+font-size: 1.8em;
+}
+
+th,
+td {
+border: 1px solid white; /* Border color */
+padding: 18px;
+text-align: left;
+}
+
+th {
+background-color: #333; /* Header background color */
+}
+
+
+
 body {
     background-color: black;
+}
+
+.centered-div {
+    max-width: 900px; /* Set your preferred width */
+    max-height: 400px; /* Set your preferred height */
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* To center text horizontally */
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+.scaled-image {
+    max-width: 100%; /* Set your preferred maximum width */
+    max-height: 50%; /* Set your preferred maximum height */
+    width: auto;
+    height: auto;
+}
+
+.float-bottom{
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    color: #f0f0f0;
+}
+
+.float-bottom h1 {
+    color: white;
+    font-size: 1em;
 }
