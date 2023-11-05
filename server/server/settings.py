@@ -208,3 +208,7 @@ LONGITUDE = os.environ.get("LONGITUDE")
 LATITUDE = os.environ.get("LATITUDE")
 PLACE_NAME = os.environ.get("PLACE_NAME")
 WEATHER_CACHE_SECONDS = 60 * 10
+
+KIOSK_DETECTIONS_NOW_MINUTES = int(
+    os.environ.get("KIOSK_DETECTIONS_NOW_MINUTES", 5)
+)  # The number of minutes a detection will be considered a NOW! detections.

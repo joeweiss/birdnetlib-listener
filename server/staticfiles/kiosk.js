@@ -3,12 +3,15 @@ Vue.createApp({
     return {
       message: "Loading ...",
       detectionsNow: [],
+      detectionNowDisplaying: null,
       detectionsToday: [],
+      detectionTodayDisplaying: null,
       speciesImages: {},
       view: "detections",
-      viewModes: ["detections", "daily", "weather"],
-      rotationSeconds: 10,
-      nowCheckSeconds: 5,
+      viewModes: ["detections", "weather"],
+      rotationSeconds: 15,
+      nowCheckSeconds: 15,
+      dailyCheckSeconds: 120,
       weatherRefreshSeconds: 60 * 5,
       weatherCurrent: {},
       weatherForecast: {},
@@ -16,7 +19,7 @@ Vue.createApp({
     };
   },
   mounted() {
-    this.message = "Loading ...";
+    this.message = "Starting ...";
 
     this.getCurrentDetections();
     this.getDailyBirds();
@@ -30,22 +33,66 @@ Vue.createApp({
       const formattedTime = currentDate.toLocaleTimeString("en-US", {
         hour: "numeric",
         minute: "2-digit",
-        second: "2-digit",
+        // second: "2-digit",
       });
       _this.message = formattedTime;
     }, 1000);
 
-    // Refresh every 15 seconds for detections.
+    // Refresh for current detections.
     setInterval(() => {
       _this.getCurrentDetections();
     }, 1000 * this.nowCheckSeconds);
 
+    // Refresh for daily birds.
+    setInterval(() => {
+      _this.getDailyBirds();
+    }, 1000 * this.dailyCheckSeconds);
+
     // Rotate the mode every 60 seconds.
     setInterval(() => {
+      if (_this.detectionsNow.length > 0 && _this.view == "detections") {
+        // Do not rotate off of detections if there are now detections.
+        return;
+      }
+
       const currentIndex = _this.viewModes.indexOf(_this.view);
       const nextIndex = (currentIndex + 1) % _this.viewModes.length;
       _this.view = _this.viewModes[nextIndex];
     }, 1000 * this.rotationSeconds);
+
+    // Rotate detected bird every 10 seconds.
+    setInterval(() => {
+      console.log("Rotating now bird.");
+      const birdArray = _this.detectionsNow;
+      if (birdArray.length == 0) {
+        _this.detectionNowDisplaying = null;
+        return;
+      }
+
+      if (_this.detectionNowDisplaying == null) {
+        _this.detectionNowDisplaying = birdArray[0];
+      }
+      const currentIndex = birdArray.indexOf(_this.detectionNowDisplaying);
+      const nextIndex = (currentIndex + 1) % birdArray.length;
+      _this.detectionNowDisplaying = birdArray[nextIndex];
+    }, 1000 * 10);
+
+    setInterval(() => {
+      console.log("Rotating daily bird.");
+      const birdArray = _this.detectionsToday;
+      if (birdArray.length == 0) {
+        _this.detectionTodayDisplaying = null;
+        return;
+      }
+      if (_this.detectionTodayDisplaying == null) {
+        _this.detectionTodayDisplaying = birdArray[0];
+      }
+      const currentIndex = birdArray.indexOf(_this.detectionTodayDisplaying);
+      console.log(currentIndex);
+      const nextIndex = (currentIndex + 1) % birdArray.length;
+      _this.detectionTodayDisplaying = birdArray[nextIndex];
+      console.log(_this.detectionTodayDisplaying.common_name);
+    }, 1000 * 10);
 
     // Refresh the weather.
     setInterval(() => {
@@ -61,10 +108,28 @@ Vue.createApp({
           const data = await response.json();
           console.log("Current Detections:", data);
           // Further processing or state update with the fetched data
+
+          // Did birds change?
+          let newNowNeeded = true;
+          if (
+            arraysAreEqual(
+              _this.detectionsNow.map((i) => i.id),
+              data.map((i) => i.id)
+            )
+          ) {
+            console.log("No changes!");
+            newNowNeeded = false;
+          }
+
           _this.detectionsNow = data;
           _this.detectionsNow.forEach((item) => {
             _this.getNewImage(item.species.id);
           });
+
+          if (_this.detectionsNow.length > 0 && newNowNeeded) {
+            // Set the displaying item.
+            _this.detectionNowDisplaying = _this.detectionsNow[0];
+          }
         } else {
           throw new Error("Failed to fetch data");
         }
@@ -81,11 +146,15 @@ Vue.createApp({
           const data = await response.json();
           console.log("Today Detections:", data);
           // Further processing or state update with the fetched data
-          const numberToDisplay = 10;
-          _this.detectionsToday = data.slice(0, numberToDisplay);
-          // _this.detectionsNow.forEach((item) => {
-          //   _this.getNewImage(item.species.id);
-          // });
+          _this.detectionsToday = data;
+          _this.detectionsToday.forEach((item) => {
+            _this.getNewImage(item.id);
+          });
+
+          if (_this.detectionsToday.length > 0) {
+            // Set the displaying item.
+            _this.detectionTodayDisplaying = _this.detectionsToday[0];
+          }
         } else {
           throw new Error("Failed to fetch data");
         }
@@ -100,7 +169,7 @@ Vue.createApp({
         const response = await fetch(`/api/species/${speciesId}/image/`); // Replace with your API endpoint
         if (response.ok) {
           const data = await response.json();
-          console.log("Current Detections:", data);
+          console.log("getNewImage:", data);
           // Further processing or state update with the fetched data
           _this.speciesImages[speciesId] = data.url;
         } else {
@@ -157,5 +226,47 @@ Vue.createApp({
         const response = await fetch("/api/shutdown/");
       }
     },
+    async populateDetections() {
+      const response = await fetch("/api/testing/populate_detections_now/");
+    },
+    returnRelativeTime(fromDate) {
+      const currentDate = new Date();
+      const providedDate = new Date(fromDate);
+
+      const elapsed = currentDate.getTime() - providedDate.getTime();
+
+      const seconds = Math.floor(elapsed / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (days > 0) {
+        return `${days} day${days > 1 ? "s" : ""} ago`;
+      } else if (hours > 0) {
+        return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+      } else if (minutes > 0) {
+        return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+      } else {
+        return `${seconds} second${seconds !== 1 ? "s" : ""} ago`;
+      }
+    },
   },
 }).mount("#app");
+
+function arraysAreEqual(arr1, arr2) {
+  // Check if the arrays are of the same length
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  // Check each element in the arrays
+  for (let i = 0; i < arr1.length; i++) {
+    // If any elements differ, arrays are not equal
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  // If all elements are equal, arrays are equal
+  return true;
+}

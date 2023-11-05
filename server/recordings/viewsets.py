@@ -76,11 +76,8 @@ class NowDetectionViewSet(viewsets.ReadOnlyModelViewSet):
     This viewset automatically provides `list` and `retrieve` actions.
     """
 
-    recent_minutes = 10
-    recent_cutoff_time = timezone.now() - timedelta(minutes=recent_minutes)
-
     def get_queryset(self):
-        recent_minutes_default = 10
+        recent_minutes_default = settings.KIOSK_DETECTIONS_NOW_MINUTES
         recent_minutes = int(
             self.request.query_params.get("minutes", recent_minutes_default)
         )
@@ -94,6 +91,7 @@ class NowDetectionViewSet(viewsets.ReadOnlyModelViewSet):
 class SpeciesCountSerializer(serializers.Serializer):
     common_name = serializers.CharField(source="species__common_name")
     scientific_name = serializers.CharField(source="species__scientific_name")
+    id = serializers.IntegerField(source="species__id")
     count = serializers.IntegerField()
 
 
@@ -101,10 +99,6 @@ class DailySpeciesViewSet(viewsets.ReadOnlyModelViewSet):
     """
     This viewset automatically provides `list` and `retrieve` actions.
     """
-
-    recent_minutes = 10
-    recent_cutoff_time = timezone.now() - timedelta(minutes=recent_minutes)
-    queryset = Detection.objects.all().filter(detected_at__gte=recent_cutoff_time)
 
     def get_queryset(self):
         # Filter the queryset by the date field
@@ -133,13 +127,14 @@ class DailySpeciesViewSet(viewsets.ReadOnlyModelViewSet):
             # print("tz_end_date", tz_end_date)
             query = query.filter(detected_at__date__lte=tz_end_date)
 
-
         if not start_date and not end_date:
             # Filter just for today.
             query = query.filter(detected_at__date=timezone.now())
 
         queryset = (
-            query.values("species__common_name", "species__scientific_name")
+            query.values(
+                "species__common_name", "species__scientific_name", "species__id"
+            )
             .annotate(count=Count("species"))
             .order_by("-count")
             .distinct()
@@ -178,4 +173,24 @@ class SpeciesViewSet(viewsets.ReadOnlyModelViewSet):
         # Select a random of the 5 images.
         image = choice(image_list)
 
-        return Response({"common_name": species.common_name, "url": image["url_l"]})
+        image_url = image.get("url_o")
+        if not image_url:
+            image_url = image.get("url_l")
+
+        if not image_url:
+            image_url = image.get("url_c")
+
+        if not image_url:
+            image_url = image.get("sizes", {}).get("Original", {}).get("url")
+
+        if not image_url:
+            image_url = image.get("sizes", {}).get("Large", {}).get("url")
+
+        if not image_url:
+            image_url = image.get("sizes", {}).get("Medium", {}).get("url")
+
+        if not image_url:
+            pprint(image.__dict__)
+            raise NotImplementedError("Need a handler for this exception.")
+
+        return Response({"common_name": species.common_name, "url": image_url})

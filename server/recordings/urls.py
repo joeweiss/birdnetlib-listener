@@ -4,6 +4,7 @@ from recordings.api_views import (
     daily_bird_report,
     get_weather_conditions,
     get_weather_forecast,
+    populate_fake_detections,
 )
 
 urlpatterns = [
@@ -11,5 +12,6 @@ urlpatterns = [
     path("api/weather/current/", get_weather_conditions),
     path("api/weather/forecast/", get_weather_forecast),
     path("species/<id>/", DetectionSpeciesListView.as_view(), name="detection_species"),
+    path("api/testing/populate_detections_now/", populate_fake_detections),
     path("", index),
 ]

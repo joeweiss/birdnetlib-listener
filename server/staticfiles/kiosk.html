@@ -9,38 +9,73 @@
 
   <body>
     <div id="app">
-      <div class="centered-div">
+      <div>
         <!-- Detection -->
-        <div v-if="view == 'detections'">
-          <div v-if="detectionsNow.length > 0">
-            <div v-for="detection in detectionsNow">
-              <div v-if="detection.species.id in speciesImages">
-                <img
-                  :src="speciesImages[detection.species.id]"
-                  class="scaled-image"
-                />
-              </div>
-              <h2 style="position: relative; margin-bottom: -25px;">Now hearing</h2>
-              <h1>{{ detection.species.common_name }}</h1>
-              
+        <div v-if="view == 'detections'" class="detections">
+
+          <div v-if="detectionNowDisplaying" class="detections-container">
+
+            <h3><span class="blink-dot"></span> Recent detection </h3>
+            
+
+            <!-- First detection is shown -->
+            <img
+              v-if="detectionNowDisplaying"
+              :src="speciesImages[detectionNowDisplaying.species.id]"
+              class="scaled-image"
+              :key="'today-image' + detectionTodayDisplaying.id"
+            />
+
+            <div v-if="detectionNowDisplaying" class="text-container" :key="'today-text' + detectionTodayDisplaying.id">
+              <h1>{{detectionNowDisplaying.species.common_name}}</h1>
+              <h2>Detected {{returnRelativeTime(detectionNowDisplaying.detected_at)}}</h2>
             </div>
+
           </div>
-          <div v-else>
-            <h1>It's all quiet out there now.</h1>
+          <div v-else class="detections-container">
+            <img
+              v-if="detectionTodayDisplaying"
+              :src="speciesImages[detectionTodayDisplaying.id]"
+              class="scaled-image"
+              :key="'daily-image' + detectionTodayDisplaying.id"
+            />
+
+            <div v-if="detectionTodayDisplaying" class="text-container" :key="'daily-text' + detectionTodayDisplaying.id">
+              <h1>{{detectionTodayDisplaying.common_name}}</h1>
+              <h2>Detected {{detectionTodayDisplaying.count}} times today</h2>
+            </div>
+
           </div>
         </div>
 
         <!-- Weather -->
 
-        <div v-if="view == 'weather' && weatherLoaded">
-          <h2>Your current weather in {{ weatherCurrent.name }}</h2>
-          <h1>Temp: {{ parseInt(weatherCurrent.main.temp) }} F</h1>
-          <h1>Conditions: {{ weatherCurrent.weather[0].main}}</h1>
-          <h1>Feels like: {{ parseInt(weatherCurrent.main.feels_like) }} F</h1>
+        <div v-if="view == 'weather' && weatherLoaded" class="detections">
+
+          <div class="text">
+            <h2>and {{ weatherCurrent.weather[0].main}} in {{ weatherCurrent.name }}</h2>
+            <h1>Currently {{ parseInt(weatherCurrent.main.temp) }}° F</h1>
+            <!-- <h1>Conditions: {{ weatherCurrent.weather[0].main}}</h1>
+            <h1>Feels like: {{ parseInt(weatherCurrent.main.feels_like) }} F</h1> -->
+          </div>
+
+          <img
+            v-if="detectionTodayDisplaying"
+            :src="speciesImages[detectionTodayDisplaying.id]"
+            class="scaled-image"
+            :key="'daily-image-weather-view' + detectionTodayDisplaying.id"
+          />
+
+          <!-- <div v-if="detectionTodayDisplaying" class="text-container" :key="'daily-text' + detectionTodayDisplaying.id">
+            <h1>{{detectionTodayDisplaying.common_name}}</h1>
+            <h2>Detected {{detectionTodayDisplaying.count}} times today</h2>
+          </div> -->
+
+
         </div>
 
         <!-- Daily list -->
-        <div v-if="view == 'daily'">
+        <!-- <div v-if="view == 'daily'">
           <h2>Top birds detected today</h2>
             <table>
               <tr>
@@ -52,11 +87,14 @@
                 <td>{{species.count}}</td>
               </tr>
             </table>
-        </div>
+        </div> -->
       </div>
 
       <div class="float-bottom">
-        <h1 @click="callShutdown">{{ message }}</h1>
+        <h1 @click="callShutdown">⏻</h1>
+      </div>
+      <div class="float-top">
+        <h1 @click="populateDetections">{{ message }}</h1>
       </div>
     </div>
   </body>
