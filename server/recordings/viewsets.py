@@ -133,6 +133,11 @@ class DailySpeciesViewSet(viewsets.ReadOnlyModelViewSet):
             # print("tz_end_date", tz_end_date)
             query = query.filter(detected_at__date__lte=tz_end_date)
 
+
+        if not start_date and not end_date:
+            # Filter just for today.
+            query = query.filter(detected_at__date=timezone.now())
+
         queryset = (
             query.values("species__common_name", "species__scientific_name")
             .annotate(count=Count("species"))
@@ -163,7 +168,7 @@ class SpeciesViewSet(viewsets.ReadOnlyModelViewSet):
             api_key=settings.FLICKR_KEY, api_secret=settings.FLICKR_SECRET
         )
         image_list = flickr_api.Photo.search(
-            text="American Crow",
+            text=species.common_name,
             content_types=0,
             safe_search=1,
             per_page=5,

@@ -1,6 +1,15 @@
+#app{
+    position: absolute;
+    width: 1024px;
+    height: 600px;
+    background-color: black;
+    overflow: hidden;
+}
+
+
 h1 {
     color: white;
-    font-size: 5em;
+    font-size: 3em;
 }
 
 h2 {
@@ -13,7 +22,7 @@ width: 100%;
 border-collapse: collapse;
 color: white; /* Text color */
 background-color: black; /* Background color */
-font-size: 1.8em;
+font-size: 1em;
 }
 
 th,
@@ -27,16 +36,17 @@ th {
 background-color: #333; /* Header background color */
 }
 
-
-
-body {
-    background-color: black;
+body{
+    padding: 0px;
+    margin: 0px;
+    background-color: #222;
 }
 
+
 .centered-div {
-    max-width: 900px; /* Set your preferred width */
-    max-height: 400px; /* Set your preferred height */
-    background-color: #000;
+    max-width: 700px; /* Set your preferred width */
+    max-height: 600px; /* Set your preferred height */
+    background-color: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,11 +55,12 @@ body {
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: block;
   }
 
 .scaled-image {
-    max-width: 100%; /* Set your preferred maximum width */
-    max-height: 50%; /* Set your preferred maximum height */
+    max-width: 75%; /* Set your preferred maximum width */
+    max-height: 60%; /* Set your preferred maximum height */
     width: auto;
     height: auto;
 }

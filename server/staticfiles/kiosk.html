@@ -14,14 +14,15 @@
         <div v-if="view == 'detections'">
           <div v-if="detectionsNow.length > 0">
             <div v-for="detection in detectionsNow">
-              <h2>Now hearing</h2>
-              <h1>{{ detection.species.common_name }}</h1>
               <div v-if="detection.species.id in speciesImages">
                 <img
                   :src="speciesImages[detection.species.id]"
                   class="scaled-image"
                 />
               </div>
+              <h2 style="position: relative; margin-bottom: -25px;">Now hearing</h2>
+              <h1>{{ detection.species.common_name }}</h1>
+              
             </div>
           </div>
           <div v-else>
@@ -54,8 +55,6 @@
         </div>
       </div>
 
-      <div id="openweathermap-widget-11"></div>
-
       <div class="float-bottom">
         <h1 @click="callShutdown">{{ message }}</h1>
       </div>
@@ -64,15 +63,17 @@
 
   <script type="text/javascript" src="kiosk.js"></script>
 
-  <!-- <script>
+
+
+
+<script>
     // Leave the reload outside of kiosk.js.
+    // Note: setTimeout in milliseconds.
+    let minutes = 30;
     setTimeout(() => {
         window.location.reload();
-    }, 30 * 1000);
-</script> -->
-
-
-
+    }, minutes * 60 * 1000);
+</script>
 
 
 </html>
