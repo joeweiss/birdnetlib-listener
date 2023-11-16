@@ -16,6 +16,7 @@ Vue.createApp({
       weatherCurrent: {},
       weatherForecast: {},
       weatherLoaded: false,
+      imageIds: {},
     };
   },
   mounted() {
@@ -172,6 +173,7 @@ Vue.createApp({
           console.log("getNewImage:", data);
           // Further processing or state update with the fetched data
           _this.speciesImages[speciesId] = data.url;
+          _this.imageIds[data.url] = data.id; // So you can reverse this later.
         } else {
           throw new Error("Failed to fetch data");
         }
@@ -226,8 +228,29 @@ Vue.createApp({
         const response = await fetch("/api/shutdown/");
       }
     },
-    async populateDetections() {
-      const response = await fetch("/api/testing/populate_detections_now/");
+    async hideCurrentImage() {
+      let current_image_url;
+      if (this.detectionNowDisplaying) {
+        current_image_url =
+          this.speciesImages[this.detectionNowDisplaying.species.id];
+      } else {
+        current_image_url =
+          this.speciesImages[this.detectionTodayDisplaying.id];
+      }
+      if (!current_image_url) return;
+      result = confirm("Hide this image?");
+      if (result) {
+        const response = await fetch(
+          `/api/species-images/${this.imageIds[current_image_url]}/`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ is_active: false }),
+          }
+        );
+      }
     },
     returnRelativeTime(fromDate) {
       const currentDate = new Date();

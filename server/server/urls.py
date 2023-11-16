@@ -25,6 +25,10 @@ router = routers.DefaultRouter()
 router.register(r"users", viewsets.UserViewSet, basename="users")
 router.register(r"detections", viewsets.DetectionViewSet, basename="detections")
 router.register(r"species", viewsets.SpeciesViewSet, basename="species")
+router.register(
+    r"species-images", viewsets.SpeciesImageViewSet, basename="species-images"
+)
+
 
 router.register(
     r"today-detections", viewsets.DailyDetectionViewSet, basename="today-detections"

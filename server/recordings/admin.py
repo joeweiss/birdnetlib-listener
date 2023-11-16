@@ -16,6 +16,14 @@ class SpeciesAdmin(admin.ModelAdmin):
 admin.site.register(app_models.Species, SpeciesAdmin)
 
 
+class SpeciesImageAdmin(admin.ModelAdmin):
+    list_display = ["species", "source_id", "is_active"]
+    list_filter = ["is_active"]
+
+
+admin.site.register(app_models.SpeciesImage, SpeciesImageAdmin)
+
+
 class AnalyzerAdmin(admin.ModelAdmin):
     list_display = ["name"]
 

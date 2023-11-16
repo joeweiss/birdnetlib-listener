@@ -54,7 +54,7 @@
 
           <div class="text">
             <h2>and {{ weatherCurrent.weather[0].main}} in {{ weatherCurrent.name }}</h2>
-            <h1>Currently {{ parseInt(weatherCurrent.main.temp) }}° F</h1>
+            <h1>Currently {{ parseInt(weatherCurrent.main.temp) }}°</h1>
             <!-- <h1>Conditions: {{ weatherCurrent.weather[0].main}}</h1>
             <h1>Feels like: {{ parseInt(weatherCurrent.main.feels_like) }} F</h1> -->
           </div>
@@ -94,7 +94,7 @@
         <h1 @click="callShutdown">⏻</h1>
       </div>
       <div class="float-top">
-        <h1 @click="populateDetections">{{ message }}</h1>
+        <h1 @click="hideCurrentImage">{{ message }}</h1>
       </div>
     </div>
   </body>

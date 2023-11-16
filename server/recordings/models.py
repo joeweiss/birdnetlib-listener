@@ -92,6 +92,20 @@ class Species(models.Model):
         verbose_name_plural = "species"
 
 
+class SpeciesImage(models.Model):
+    species = models.ForeignKey(Species, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="species_images")
+    source_id = models.CharField(
+        null=True,
+        blank=True,
+        max_length=120,
+        help_text="The source ID for Flickr, or any other source.",
+    )
+    is_active = models.BooleanField(
+        default=True, help_text="Set to False to skip this image."
+    )
+
+
 class Analyzer(TimeStampedModel):
     name = models.CharField(max_length=100)
     version = models.CharField(max_length=20, blank=True, null=True)

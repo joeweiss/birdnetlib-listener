@@ -192,7 +192,8 @@ DOMAIN = os.environ.get(
 FLICKR_BLACKLIST_IDS = os.environ.get("FLICKR_BLACKLIST_IDS", "").split(" ")
 FLICKR_KEY = os.environ.get("FLICKR_KEY")
 FLICKR_SECRET = os.environ.get("FLICKR_SECRET")
-FLICKR_RESULTS_CACHE_SECONDS = 60 * 1  # 1 minute
+FLICKR_RESULTS_LIMIT_PER_SPECIES = 5
+
 
 # Light-weight, only really for Flickr image urls.
 CACHES = {
