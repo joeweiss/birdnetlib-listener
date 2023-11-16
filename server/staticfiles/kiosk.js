@@ -9,8 +9,9 @@ Vue.createApp({
       speciesImages: {},
       view: "detections",
       viewModes: ["detections", "weather"],
-      rotationSeconds: 15,
+      rotationSeconds: 30,
       nowCheckSeconds: 15,
+      rotateDetectedBirdSeconds: 15,
       dailyCheckSeconds: 120,
       weatherRefreshSeconds: 60 * 5,
       weatherCurrent: {},
@@ -51,6 +52,7 @@ Vue.createApp({
 
     // Rotate the mode every 60 seconds.
     setInterval(() => {
+      if (!_this.detectionsNow) return;
       if (_this.detectionsNow.length > 0 && _this.view == "detections") {
         // Do not rotate off of detections if there are now detections.
         return;
@@ -61,7 +63,7 @@ Vue.createApp({
       _this.view = _this.viewModes[nextIndex];
     }, 1000 * this.rotationSeconds);
 
-    // Rotate detected bird every 10 seconds.
+    // Rotate detected now bird.
     setInterval(() => {
       console.log("Rotating now bird.");
       const birdArray = _this.detectionsNow;
@@ -76,8 +78,9 @@ Vue.createApp({
       const currentIndex = birdArray.indexOf(_this.detectionNowDisplaying);
       const nextIndex = (currentIndex + 1) % birdArray.length;
       _this.detectionNowDisplaying = birdArray[nextIndex];
-    }, 1000 * 10);
+    }, 1000 * _this.rotateDetectedBirdSeconds);
 
+    // Rotate detected daily bird.
     setInterval(() => {
       console.log("Rotating daily bird.");
       const birdArray = _this.detectionsToday;
@@ -93,7 +96,7 @@ Vue.createApp({
       const nextIndex = (currentIndex + 1) % birdArray.length;
       _this.detectionTodayDisplaying = birdArray[nextIndex];
       console.log(_this.detectionTodayDisplaying.common_name);
-    }, 1000 * 10);
+    }, 1000 * _this.rotateDetectedBirdSeconds);
 
     // Refresh the weather.
     setInterval(() => {

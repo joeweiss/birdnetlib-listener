@@ -32,6 +32,7 @@
             </div>
 
           </div>
+
           <div v-else class="detections-container">
             <img
               v-if="detectionTodayDisplaying"
@@ -43,6 +44,11 @@
             <div v-if="detectionTodayDisplaying" class="text-container" :key="'daily-text' + detectionTodayDisplaying.id">
               <h1>{{detectionTodayDisplaying.common_name}}</h1>
               <h2>Detected {{detectionTodayDisplaying.count}} times today</h2>
+            </div>
+
+            <div v-if="!detectionTodayDisplaying" class="text-container" key="daily-text-none">
+              <h1></h1>
+              <h2>System is listening for birds ...</h2>
             </div>
 
           </div>

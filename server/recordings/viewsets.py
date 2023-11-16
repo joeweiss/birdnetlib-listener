@@ -204,21 +204,24 @@ class SpeciesViewSet(viewsets.ReadOnlyModelViewSet):
         # Select a random of the 10 images.
         image = choice(image_list)
 
-        image_url = image.get("url_o")
-        if not image_url:
-            image_url = image.get("url_l")
+        # Use the Large size or Medium.
+        image_url = image.get("sizes", {}).get("Large", {}).get("source")
 
         if not image_url:
-            image_url = image.get("url_c")
+            image_url = image.get("sizes", {}).get("Medium", {}).get("source")
 
-        if not image_url:
-            image_url = image.get("sizes", {}).get("Original", {}).get("url")
+        # image_url = image.get("url_o")
+        # if not image_url:
+        #     image_url = image.get("url_l")
 
-        if not image_url:
-            image_url = image.get("sizes", {}).get("Large", {}).get("url")
+        # if not image_url:
+        #     image_url = image.get("url_c")
 
-        if not image_url:
-            image_url = image.get("sizes", {}).get("Medium", {}).get("url")
+        # if not image_url:
+        #     image_url = image.get("sizes", {}).get("Original", {}).get("url")
+
+        # if not image_url:
+        #     image_url = image.get("sizes", {}).get("Medium", {}).get("url")
 
         if not image_url:
             pprint(image.__dict__)
