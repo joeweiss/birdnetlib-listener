@@ -7,7 +7,7 @@ while true; do
     # Check if the file exists
     if [ -e "$file_to_check" ]; then
         # If the file exists, stop Chrome using pkill
-        pkill chrome
+        pkill chromium-browse
         echo "Chrome has been stopped."
 
         # Remove the file
