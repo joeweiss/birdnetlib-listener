@@ -5,10 +5,12 @@ from recordings.api_views import (
     get_weather_conditions,
     get_weather_forecast,
     populate_fake_detections,
+    close_kiosk,
 )
 
 urlpatterns = [
     path("daily.json", daily_bird_report),
+    path("api/system/kiosk/close/", close_kiosk),
     path("api/weather/current/", get_weather_conditions),
     path("api/weather/forecast/", get_weather_forecast),
     path("species/<id>/", DetectionSpeciesListView.as_view(), name="detection_species"),

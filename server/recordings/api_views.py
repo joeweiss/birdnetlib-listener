@@ -43,6 +43,21 @@ def daily_bird_report(request):
     return Response({"detections": f"what, world!{today_detections}"})
 
 
+@api_view()
+def close_kiosk(request):
+    filepath = "/usr/audio/incoming/kill-kiosk.txt"
+    # Save the file with no text.
+    content_to_write = ""
+    try:
+        with open(filepath, "w") as file:
+            file.write(content_to_write)
+        print(f"File saved successfully to {filepath}")
+        success = True
+    except IOError as e:
+        success = False
+    return Response({"success": success})
+
+
 @cache_page(settings.WEATHER_CACHE_SECONDS)
 @api_view()
 def get_weather_conditions(request):
