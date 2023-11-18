@@ -17,6 +17,6 @@ while true; do
         echo "File does not exist. Chrome is not stopped."
     fi
     
-    # Sleep for 10 seconds before checking again
-    sleep 10
+    # Sleep for 5 seconds before checking again
+    sleep 5
 done

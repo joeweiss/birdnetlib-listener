@@ -61,23 +61,32 @@ sudo systemctl enable docker
 # Edit to change paths to your own home directory
 pico server/recording.service
 pico server/analysis.service
+pico server/browser-check.service
+
 
 # Copy to service directory
 sudo cp server/recording.service /etc/systemd/system/
 sudo cp server/analysis.service /etc/systemd/system/
+sudo cp server/browser-check.service /etc/systemd/system/
 
 
 # Start the service
 sudo systemctl start recording.service
 sudo systemctl start analysis.service
+sudo systemctl start browser-check.service
+
 
 # Check to see that it is running
 sudo systemctl status recording.service
 sudo systemctl status analysis.service
+sudo systemctl status browser-check.service
+
 
 # If all goes well, enable them both.
 sudo systemctl enable recording.service
 sudo systemctl enable analysis.service
+sudo systemctl enable browser-check.service
+
 
 # Reboot and confirm the services are running.
 sudo reboot
