@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the path to the file you want to check for
-file_to_check="/home/mccaskey/Code/birdnetlib-listener-device/audio/incoming/kill-kiosk.txt"
+file_to_check="/home/mccaskey/Code/birdnetlib-listener-device/audio/inbox/kill-kiosk.txt"
 
 while true; do
     # Check if the file exists
