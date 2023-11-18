@@ -226,9 +226,10 @@ Vue.createApp({
       return count === 1 ? itemName : itemName + "s";
     },
     async callShutdown() {
-      result = confirm("Shutdown?");
+      result = confirm("Close the application?");
       if (result) {
-        const response = await fetch("/api/shutdown/");
+        const response = await fetch("/api/system/kiosk/close/");
+        alert("The application will exit in 5 seconds.");
       }
     },
     async hideCurrentImage() {
