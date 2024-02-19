@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Delay so the docker container has time to start.
+sleep 15
+
 xset s noblank
 xset s off
 xset -dpms

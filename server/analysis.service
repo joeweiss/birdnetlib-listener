@@ -4,9 +4,9 @@ After=network.target
 
 [Service]
 Environment=XDG_RUNTIME_DIR=/run/user/1000
-User=mccaskey
-Group=mccaskey
-WorkingDirectory=/home/mccaskey/Code/birdnetlib-listener-device
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/Code/birdnetlib-listener-device
 ExecStart=docker compose exec web python manage.py runscript analyze
 
 [Install]

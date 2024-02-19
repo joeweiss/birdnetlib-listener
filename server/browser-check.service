@@ -6,8 +6,8 @@ Environment=XDG_RUNTIME_DIR=/run/user/1000
 Restart=always
 Type=simple
 RestartSec=3
-User=mccaskey
-ExecStart=sh /home/mccaskey/Code/birdnetlib-listener-device/kiosk-exit-check.sh
+User=pi
+ExecStart=sh /home/pi/Code/birdnetlib-listener-device/kiosk-exit-check.sh
 
 [Install]
 WantedBy=multi-user.target

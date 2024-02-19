@@ -74,18 +74,21 @@ sudo cp server/browser-check.service /etc/systemd/system/
 sudo systemctl start recording.service
 sudo systemctl start analysis.service
 sudo systemctl start browser-check.service
+sudo systemctl start kiosk.service
 
 
 # Check to see that it is running
 sudo systemctl status recording.service
 sudo systemctl status analysis.service
 sudo systemctl status browser-check.service
+sudo systemctl status kiosk.service
 
 
 # If all goes well, enable them both.
 sudo systemctl enable recording.service
 sudo systemctl enable analysis.service
 sudo systemctl enable browser-check.service
+sudo systemctl enable kiosk.service
 
 
 # Reboot and confirm the services are running.
@@ -99,5 +102,31 @@ sudo reboot
 ## Setup kiosk mode
 
 Mostly adapted from here:
-https://www.raspberrypi.com/tutorials/how-to-use-a-raspberry-pi-in-kiosk-mode/
+https://pimylifeup.com/raspberry-pi-kiosk/
 
+Install system requirements.
+
+```
+sudo apt install xdotool unclutter sed
+```
+
+
+```
+sudo nano /etc/rc.local
+```
+
+```
+# Add the following above the exit 0 line.
+
+sh /home/pi/Code/birdnetlib-listener-device/kiosk.sh &
+
+
+```
+
+
+```
+sudo chmod +x /etc/rc.local
+sudo reboot
+
+
+```
