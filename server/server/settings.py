@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     "django_extensions",
     "rest_framework",
+    "corsheaders",
     "authuser",
     "recordings",
 ]
@@ -60,6 +61,7 @@ AUTH_USER_MODEL = "authuser.User"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -133,6 +135,14 @@ USE_L10N = True
 USE_TZ = True
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+]
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -187,6 +197,7 @@ DOMAIN = os.environ.get(
     "SITE_DOMAIN",
     "example.com",
 )
+
 
 
 FLICKR_BLACKLIST_IDS = os.environ.get("FLICKR_BLACKLIST_IDS", "").split(" ")

@@ -148,3 +148,5 @@ requirements.dev.txt
 docker-compose.override.yml
 .autoenv
 
+!server/staticfiles/dist
+
