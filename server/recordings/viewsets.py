@@ -86,7 +86,11 @@ class DailyDetectionViewSet(viewsets.ReadOnlyModelViewSet):
     This viewset automatically provides `list` and `retrieve` actions.
     """
 
-    queryset = Detection.objects.all().filter(detected_at__date=timezone.now())
+    current_date = timezone.localtime(timezone.now()).date()
+    start_of_day = timezone.make_aware(timezone.datetime.combine(current_date, timezone.datetime.min.time()))
+    end_of_day = start_of_day + timedelta(days=1)
+
+    queryset = Detection.objects.filter(detected_at__range=(start_of_day, end_of_day))
     serializer_class = DetectionSerializer
 
 
