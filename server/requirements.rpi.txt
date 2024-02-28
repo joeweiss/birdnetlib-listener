@@ -15,6 +15,7 @@ decorator==5.1.1
 dj-database-url==1.0.0
 Django==3.2.15
 django-braces==1.15.0
+django-cors-headers
 django-extensions==3.2.0
 django-model-utils==4.2.0
 djangorestframework==3.14.0
@@ -48,7 +49,7 @@ scikit-learn==1.0.2
 scipy==1.7.3
 SoundFile==0.10.3.post1
 sqlparse==0.4.2
-# tflite-runtime @ file:///usr/src/app/tflite_runtime-2.6.0-cp39-cp39-linux_aarch64.whl
+tflite-runtime @ file:///usr/src/app/tflite_runtime-2.6.0-cp39-cp39-linux_aarch64.whl
 threadpoolctl==3.1.0
 toml==0.10.2
 tomli==2.0.1
