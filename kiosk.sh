@@ -1,7 +1,17 @@
 #!/bin/bash
 
+# Update from github
+docker compose -f docker-compose.rpi.yml stop
+git pull
+docker compose -f docker-compose.rpi.yml up -d
+docker compose -f docker-compose.rpi.yml exec web python manage.py migrate
+
 # Delay so the docker container has time to start.
 sleep 20
+
+
+git pull
+docker compose -f docker-compose.rpi.yml exec web python manage.py migrate
 
 xset s noblank
 xset s off
