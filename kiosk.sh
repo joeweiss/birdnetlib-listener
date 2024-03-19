@@ -4,8 +4,8 @@
 sleep 20
 
 # Update from github
-git pull
-docker compose -f docker-compose.rpi.yml exec web python manage.py migrate
+cd /home/pi/Code/birdnetlib-listener-device; git pull
+cd /home/pi/Code/birdnetlib-listener-device; docker compose -f docker-compose.rpi.yml exec web python manage.py migrate
 
 xset s noblank
 xset s off
