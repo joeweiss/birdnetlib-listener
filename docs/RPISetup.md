@@ -62,13 +62,13 @@ sudo systemctl enable docker
 pico server/recording.service
 pico server/analysis.service
 pico server/browser-check.service
-
+pico server/kiosk.service
 
 # Copy to service directory
 sudo cp server/recording.service /etc/systemd/system/
 sudo cp server/analysis.service /etc/systemd/system/
 sudo cp server/browser-check.service /etc/systemd/system/
-
+sudo cp server/kiosk.service /etc/systemd/system/
 
 # Start the service
 sudo systemctl start recording.service
