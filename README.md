@@ -108,6 +108,8 @@ python script_examples/audio_recording_rpi.py
 
 ### Adjusting audio level
 
+You may also need to select the correct soundcard.
+
 ```
 alsamixer
 ```
