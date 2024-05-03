@@ -1,7 +1,23 @@
 #!/bin/bash
 
 # Delay so the docker container has time to start.
-sleep 20
+url="http://127.0.0.1:8000"  # Replace with the URL you want to check
+status_code=0
+
+# Loop until a 200 OK response is received
+until [ "$status_code" -eq 200 ]; do
+    echo "Checking URL..."
+    # Use curl to get the HTTP status code
+    status_code=$(curl -o /dev/null -s -w "%{http_code}\n" "$url")
+
+    if [ "$status_code" -eq 200 ]; then
+        echo "Received 200 OK, continuing..."
+    else
+        echo "Service unavailable, retrying..."
+        sleep 2  # Wait for 10 seconds before retrying
+    fi
+done
+
 
 # Update from github
 cd /home/pi/Code/birdnetlib-listener-device; git pull
