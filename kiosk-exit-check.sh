@@ -10,6 +10,9 @@ while true; do
         pkill chromium-browse
         echo "Chrome has been stopped."
 
+        pkill firefox
+        echo "Firefox has been stopped."
+
         # Remove the file
         rm "$file_to_check"
         echo "File has been deleted."
