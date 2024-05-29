@@ -97,7 +97,7 @@ import dj_database_url
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=f'spatialite:///{BASE_DIR / "db.sqlite3"}'
+        default=f'spatialite:///{BASE_DIR / "db.sqlite3?timeout=20"}'
     )
 }
 

@@ -8,6 +8,7 @@ User=pi
 Group=pi
 WorkingDirectory=/home/pi/Code/birdnetlib-listener-device
 ExecStart=docker compose exec web python manage.py runscript analyze
+Restart=on-failure  # This line is added to restart the service if it crashes.
 
 [Install]
 WantedBy=multi-user.target
