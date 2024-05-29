@@ -90,17 +90,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "server.wsgi.application"
 
 
-# Database
-# Use dj_database_url for url management.
-
-import dj_database_url
-
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f'spatialite:///{BASE_DIR / "db.sqlite3?timeout=20"}'
-    )
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        'NAME': BASE_DIR / "db.sqlite3",  # Path to your database file, e.g., 'db.sqlite3'.
+        'OPTIONS': {
+            'timeout': 20,  # Timeout in seconds
+        }
+    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
