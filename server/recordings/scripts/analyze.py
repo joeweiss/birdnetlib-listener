@@ -14,6 +14,8 @@ from birdnetlib.analyzer import Analyzer
 from recordings.utils import import_from_recording
 import shutil
 
+from django.db.utils import OperationalError
+
 RECORDING_DIR = settings.INGEST_WAV_FILE_DIRECTORY
 OUTPUT_DIR = settings.OUTPUT_WAV_FILE_DIRECTORY
 ARCHIVE_AUDIO_FILES = False
@@ -48,8 +50,12 @@ def on_analyze_file_complete(recording_list):
         # Only import recordings with detections.
         if len(recording.detections) == 0:
             continue
-
-        rec_obj = import_from_recording(recording)
+        rec_obj = None
+        try:
+            rec_obj = import_from_recording(recording)
+        except OperationalError:
+            print("Error establishing a database connection")
+            pass
 
         pprint(recording.detections)
         num_detections = num_detections + len(recording.detections)
