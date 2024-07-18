@@ -1,5 +1,7 @@
 # birdnetlib-listener
 
+Current as of 20240718.
+
 ## Running in Docker
 
 ### Raspberry Pi 4 - 64bit
